@@ -1,0 +1,196 @@
+@use 'mixins';
+
+// ==========================================================================
+// Storefront sections
+// ==========================================================================
+// Shared presentation for the Digimia store patterns (products, pricing,
+// reviews, store pages). EDD block internals live in src/scss/blocks/_edd-*.
+// Rules only Digimia Pro designs use live in Digimia Pro.
+
+// Product cards built from a core Query Loop over downloads.
+.digimia-product-card {
+	@include mixins.product-card;
+
+	.wp-block-post-featured-image {
+		@include mixins.product-card-media;
+	}
+
+	> * {
+		margin-block: 0;
+	}
+
+	// The "Price and button" group.
+	.digimia-product-card__buy {
+		@include mixins.product-card-footer;
+	}
+
+	// In a flow layout (the featured card's text column) an auto margin is 0,
+	// and the hairline touched the excerpt.
+	.is-layout-flow > .digimia-product-card__buy {
+		margin-top: var(--wp--preset--spacing--medium);
+	}
+}
+
+.digimia-product-card__price {
+	@include mixins.product-card-price;
+}
+
+// Beside the shop sidebar the grid is narrow, so the card drops its inset
+// frame: the image runs to the card edges and the text gets medium padding.
+.wp-block-columns:has(.digimia-shop-sidebar) .digimia-product-card {
+	overflow: hidden;
+	padding: 0 0 var(--wp--preset--spacing--medium);
+
+	> :not(.wp-block-post-featured-image) {
+		margin-inline: var(--wp--preset--spacing--medium);
+	}
+
+	.wp-block-post-featured-image {
+		border-radius: 0;
+	}
+
+	// Within the side margins. A set width, not `auto`: the footer is a size
+	// container, which lays out an auto width as if empty and grows tall.
+	.digimia-product-card__buy {
+		width: calc(100% - 2 * var(--wp--preset--spacing--medium));
+	}
+}
+
+// Editorial shelf (product-editorial-shelf): one wide featured card, image
+// beside the text, over a row of three product cards. No card stretches to
+// match another, so the product art stays large and is never cropped.
+.digimia-shelf-featured .wp-block-post-template,
+.digimia-shelf-list .wp-block-post-template {
+	margin: 0;
+}
+
+// The featured shelf card and the product spotlight have room for a bigger price.
+:is(.digimia-shelf-featured, .digimia-product-spotlight) :is(.digimia-product-card__price:not(:has(.digimia-price-amount)), .digimia-price-amount) {
+	font-size: var(--wp--preset--font-size--large);
+}
+
+.digimia-product-card__terms a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.digimia-product-card__title {
+	@include mixins.product-card-title;
+}
+
+.digimia-product-card__excerpt p {
+	margin: 0;
+}
+
+// License tiers.
+// Query Loop post cards (card-post, card-image-text, card-text-link, card-post-list).
+.digimia-post-card,
+.digimia-post-list {
+	.wp-block-post-featured-image {
+		margin: 0;
+		overflow: hidden;
+	}
+
+	.wp-block-post-title {
+		margin: 0;
+
+		a {
+			text-decoration: none;
+			text-underline-offset: 0.2em;
+
+			&:hover {
+				text-decoration-line: underline;
+			}
+		}
+	}
+}
+
+// Pricing plan card (pricing patterns): button pinned to the bottom so plans align.
+.digimia-plan {
+	> .wp-block-buttons {
+		margin-top: auto;
+	}
+
+	.wp-block-list {
+		margin: 0;
+	}
+}
+
+.digimia-plan__price > * {
+	margin: 0;
+	line-height: 1;
+}
+
+// Split pricing (pricing-plans-split): each card ends in a row with the price
+// and the button, pinned to the bottom so the two cards align.
+.digimia-plan > .digimia-plan__footer {
+	margin-top: auto;
+}
+
+@container (max-width: 70rem) {
+	.digimia-plan .digimia-plan__footer {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
+// A badge in the accent color, for the featured plan.
+.digimia-badge.digimia-badge--accent {
+	background: var(--wp--preset--color--primary-alt);
+	color: var(--wp--custom--semantic--on-accent);
+}
+
+.digimia-badge {
+	margin: 0;
+	padding: 0.2rem 0.6rem;
+	border-radius: var(--wp--custom--radius--full);
+	background: var(--wp--custom--semantic--brand-muted);
+	color: var(--wp--preset--color--primary);
+	font-weight: 700;
+}
+
+// Reviews.
+.digimia-stars {
+	margin: 0;
+	color: var(--wp--preset--color--primary);
+	letter-spacing: 0.15em;
+}
+
+// Review card (reviews patterns): author pinned to the bottom so cards align.
+.digimia-review > .digimia-review__author {
+	margin-top: auto;
+}
+
+// Platform icons in review and contact cards, the footer, and the phone menu follow the text color, not the brand color.
+.digimia-review .wp-block-social-links.is-style-logos-only .wp-social-link,
+.digimia-contact-card .wp-block-social-links.is-style-logos-only .wp-social-link,
+.digimia-site-footer .wp-block-social-links.is-style-logos-only .wp-social-link,
+.wp-block-navigation__overlay-container .wp-block-social-links.is-style-logos-only .wp-social-link {
+	color: currentColor;
+}
+
+// Store footer.
+.digimia-footer-heading {
+	color: var(--wp--custom--semantic--text-tertiary);
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.digimia-footer-links {
+	padding: 0;
+	list-style: none;
+
+	li + li {
+		margin-top: 0.5rem;
+	}
+
+	a {
+		color: var(--wp--custom--semantic--text-secondary);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--wp--custom--semantic--text-primary);
+		}
+	}
+}

@@ -1,0 +1,331 @@
+// Welcome page (Appearance → Digimia), inc/admin-welcome.php.
+// WordPress.org asks theme admin pages to match the admin, so this keeps the
+// admin's type, spacing, and white cards, in Digimia's default colors: pine
+// buttons and links, lime icon tiles, and the Pro box as a Brand card. The
+// theme's tokens don't load in the admin, so the colors are the default
+// palette's values (theme.json).
+
+.digimia-welcome {
+	--digimia-welcome-accent: #053338; // primary
+	--digimia-welcome-accent-hover: #0a4a50; // primary-accent
+	--digimia-welcome-lime: #daff8c; // primary-alt
+	--digimia-welcome-lime-soft: #e6f4d7; // primary-alt-accent
+	--digimia-welcome-border: #dcdcde;
+	--digimia-welcome-muted: #50575e;
+
+	display: grid;
+	gap: 20px;
+	max-width: 1200px;
+
+	h1,
+	h2,
+	h3 {
+		margin: 0;
+		color: #1d2327;
+	}
+
+	h1 {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px;
+		padding: 0;
+		font-size: 28px;
+		line-height: 1.25;
+	}
+
+	h2 {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 10px;
+		font-size: 17px;
+		line-height: 1.35;
+	}
+
+	h3 {
+		font-size: 15px;
+		line-height: 1.4;
+	}
+
+	p {
+		margin: 0;
+		font-size: 14px;
+		line-height: 1.6;
+		color: var(--digimia-welcome-muted);
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li {
+		margin: 0;
+	}
+
+	svg {
+		display: block;
+		width: 24px;
+		height: 24px;
+	}
+
+	a:not(.button) {
+		color: var(--digimia-welcome-accent);
+
+		&:hover {
+			color: var(--digimia-welcome-accent-hover);
+		}
+	}
+
+	a:focus-visible {
+		outline: 2px solid var(--digimia-welcome-accent);
+		outline-offset: 2px;
+		box-shadow: none;
+	}
+}
+
+// Pill buttons like the theme's own: pine with white text, or a pine outline.
+// Hover lays a wash of the text color over the fill, as on the site.
+.wrap.digimia-welcome .button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 40px;
+	padding: 0 22px;
+	border: 1px solid var(--digimia-welcome-accent);
+	border-radius: 9999px;
+	background: transparent;
+	color: var(--digimia-welcome-accent);
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.4;
+	box-shadow: none;
+	transition: box-shadow 0.15s ease;
+
+	&:hover,
+	&:focus {
+		background: transparent;
+		color: var(--digimia-welcome-accent);
+		border-color: var(--digimia-welcome-accent);
+		box-shadow: inset 0 0 0 999px color-mix(in srgb, currentColor 8%, transparent);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--digimia-welcome-accent);
+		outline-offset: 2px;
+	}
+
+	&.button-primary,
+	&.button-primary:hover,
+	&.button-primary:focus {
+		background: var(--digimia-welcome-accent);
+		color: #fff;
+	}
+
+	&.button-primary:hover,
+	&.button-primary:focus {
+		box-shadow: inset 0 0 0 999px color-mix(in srgb, currentColor 12%, transparent);
+	}
+
+	&.button-hero {
+		min-height: 48px;
+		padding: 0 30px;
+		font-size: 15px;
+	}
+}
+
+.digimia-welcome__panel {
+	display: grid;
+	align-content: start;
+	gap: 10px;
+	padding: 24px;
+	background: #fff;
+	border: 1px solid var(--digimia-welcome-border);
+	border-radius: 8px;
+}
+
+.digimia-welcome__intro {
+	grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+	align-items: center;
+	gap: 32px;
+	padding: 32px;
+
+	.digimia-welcome__intro-text {
+		display: grid;
+		gap: 14px;
+		min-width: 0;
+	}
+
+	p {
+		max-width: 68ch;
+	}
+}
+
+.digimia-welcome__screenshot {
+	width: 100%;
+	height: auto;
+	border: 1px solid var(--digimia-welcome-border);
+	border-radius: 6px;
+}
+
+.digimia-welcome__version,
+.digimia-welcome__badge {
+	padding: 3px 10px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.5;
+	white-space: nowrap;
+}
+
+.digimia-welcome__version {
+	background: var(--digimia-welcome-lime-soft);
+	color: var(--digimia-welcome-accent);
+}
+
+.digimia-welcome__badge {
+	background: var(--digimia-welcome-lime);
+	color: var(--digimia-welcome-accent);
+}
+
+// Icon tiles as on the site: a pine icon on soft lime.
+.digimia-welcome__icon {
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border-radius: 8px;
+	background: var(--digimia-welcome-lime-soft);
+	color: var(--digimia-welcome-accent);
+}
+
+.digimia-welcome__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+	gap: 16px;
+}
+
+.digimia-welcome__card {
+	display: grid;
+	align-content: start;
+	gap: 8px;
+	padding: 20px;
+	border: 1px solid var(--digimia-welcome-border);
+	border-radius: 8px;
+}
+
+// The Pro box is a Brand card, like the theme's featured pricing plan: white
+// text on pine, lime icon tiles and button.
+.wrap.digimia-welcome .digimia-welcome__pro {
+	gap: 14px;
+	padding: 28px;
+	border-color: var(--digimia-welcome-accent);
+	background: var(--digimia-welcome-accent);
+
+	h2,
+	h3 {
+		color: #fff;
+	}
+
+	p {
+		color: rgb(255 255 255 / 80%);
+	}
+
+	.digimia-welcome__grid {
+		margin-block: 6px;
+	}
+
+	.digimia-welcome__card {
+		border-color: rgb(255 255 255 / 18%);
+		background: rgb(255 255 255 / 4%);
+	}
+
+	.digimia-welcome__icon {
+		background: var(--digimia-welcome-lime);
+	}
+
+	.button.button-primary,
+	.button.button-primary:hover,
+	.button.button-primary:focus {
+		border-color: var(--digimia-welcome-lime);
+		background: var(--digimia-welcome-lime);
+		color: var(--digimia-welcome-accent);
+	}
+
+	.button:not(.button-primary),
+	.button:not(.button-primary):hover,
+	.button:not(.button-primary):focus {
+		border-color: rgb(255 255 255 / 60%);
+		color: #fff;
+	}
+
+	.button:focus-visible {
+		outline-color: var(--digimia-welcome-lime);
+	}
+}
+
+.digimia-welcome__buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.digimia-welcome__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px 20px;
+}
+
+.digimia-welcome__links {
+	.digimia-welcome__panel {
+		gap: 8px;
+	}
+
+	a {
+		margin-top: 4px;
+		font-weight: 500;
+	}
+}
+
+// A one-line box: icon, text, and a button at the end.
+.digimia-welcome__row,
+.digimia-welcome__edd {
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 6px 20px;
+
+	> div {
+		display: grid;
+		gap: 4px;
+	}
+}
+
+.digimia-welcome__edd {
+	border-inline-start: 4px solid var(--digimia-welcome-accent);
+}
+
+@media (max-width: 782px) {
+	.digimia-welcome__intro {
+		grid-template-columns: minmax(0, 1fr);
+		padding: 24px;
+	}
+
+	.digimia-welcome__row,
+	.digimia-welcome__edd {
+		grid-template-columns: auto minmax(0, 1fr);
+
+		> .button {
+			grid-column: 1 / -1;
+			justify-self: start;
+		}
+	}
+}
+
+// The notices marker takes no room of its own in the grid.
+.digimia-welcome > .wp-header-end {
+	display: none;
+}

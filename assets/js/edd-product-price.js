@@ -1,0 +1,2 @@
+!function(){"use strict";document.addEventListener("change",t=>{const e=t.target;if(!e.matches?.('.edd_price_options input[type="radio"]'))return;const i=e.closest(".digimia-purchase-card"),c=i?.querySelector(".digimia-product-price"),r=e.closest("li")?.querySelector(".edd_price_option_price");c&&r&&(c.textContent=r.textContent.trim())})}();
+//# sourceMappingURL=edd-product-price.js.map

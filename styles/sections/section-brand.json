@@ -1,0 +1,35 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Brand",
+	"slug": "section-brand",
+	"blockTypes": [
+		"core/group",
+		"core/columns",
+		"core/column"
+	],
+	"styles": {
+		"color": {
+			"background": "var:preset|color|primary",
+			"text": "var:preset|color|base"
+		},
+		"elements": {
+			"heading": {
+				"color": {
+					"text": "var:preset|color|base"
+				}
+			},
+			"link": {
+				"color": {
+					"text": "var:preset|color|base"
+				}
+			},
+			"button": {
+				"color": {
+					"background": "var:custom|semantic|brand-button",
+					"text": "var:custom|semantic|brand-button-text"
+				}
+			}
+		}
+	}
+}

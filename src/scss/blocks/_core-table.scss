@@ -1,0 +1,65 @@
+/* Table
+--------------------------------------------- */
+
+.wp-block-table.is-style-stripes tbody tr:nth-child(odd) {
+	background-color: var(--wp--preset--color--tertiary);
+}
+
+/* Table - Comparison style (pricing comparison)
+--------------------------------------------- */
+
+.wp-block-table.is-style-comparison {
+	table {
+		min-width: 36rem;
+		border-collapse: separate;
+		border-spacing: 0;
+		border: 1px solid var(--wp--custom--semantic--border);
+		border-radius: var(--wp--custom--radius--lg);
+		overflow: hidden;
+	}
+
+	thead {
+		border-bottom: 0;
+	}
+
+	th,
+	td {
+		padding: 1rem 1.25rem;
+		border: 0;
+		border-bottom: 1px solid var(--wp--custom--semantic--border);
+		text-align: center;
+		vertical-align: middle;
+	}
+
+	th:first-child,
+	td:first-child {
+		text-align: start;
+	}
+
+	thead th {
+		background: var(--wp--custom--semantic--surface-1);
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--base);
+		font-weight: 600;
+	}
+
+	tbody td {
+		color: var(--wp--custom--semantic--text-secondary);
+	}
+
+	tbody td:first-child {
+		color: var(--wp--custom--semantic--text-primary);
+		font-weight: 500;
+	}
+
+	tbody tr:last-child td {
+		border-bottom: 0;
+	}
+
+	// Bold text marks an included feature (✓) in the brand color.
+	tbody strong {
+		color: var(--wp--preset--color--primary);
+		font-size: var(--wp--preset--font-size--medium);
+		line-height: 1;
+	}
+}

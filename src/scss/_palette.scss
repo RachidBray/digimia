@@ -1,0 +1,92 @@
+// The palette mixins (light and dark presets, semantic aliases). This file
+// prints no CSS, so anything can load it for the mixins alone: _variables.scss
+// passes them on to the theme's files, and Digimia Pro's stylesheet loads it
+// directly so it does not repeat the theme's dark mode and section style CSS.
+
+/* Palettes
+   =========================================================================
+   Both palettes come from theme.json, so the active color preset
+   (styles/colors/*.json) drives light mode, dark mode, and Contrast sections:
+
+   - settings.color.palette: the light palette (the presets themselves).
+   - settings.custom.color.dark: the dark palette. Each color preset defines
+     its own, under a `color` key so the editor still lists it as a color preset.
+   - settings.custom.color.light: references to the light presets. They resolve
+     on :root, which keeps the light values, because dark mode overrides the
+     presets on body (below), not on :root. */
+
+@mixin palette( $mode ) {
+	--wp--preset--color--primary: var(--wp--custom--color--#{$mode}--primary);
+	--wp--preset--color--primary-accent: var(--wp--custom--color--#{$mode}--primary-accent);
+	--wp--preset--color--primary-alt: var(--wp--custom--color--#{$mode}--primary-alt);
+	--wp--preset--color--primary-alt-accent: var(--wp--custom--color--#{$mode}--primary-alt-accent);
+	--wp--preset--color--main: var(--wp--custom--color--#{$mode}--main);
+	--wp--preset--color--main-accent: var(--wp--custom--color--#{$mode}--main-accent);
+	--wp--preset--color--base: var(--wp--custom--color--#{$mode}--base);
+	--wp--preset--color--secondary: var(--wp--custom--color--#{$mode}--secondary);
+	--wp--preset--color--tertiary: var(--wp--custom--color--#{$mode}--tertiary);
+	--wp--preset--color--border-light: var(--wp--custom--color--#{$mode}--border-light);
+	--wp--preset--color--border-dark: var(--wp--custom--color--#{$mode}--border-dark);
+}
+
+@mixin palette-light {
+	@include palette( light );
+	--wp--custom--semantic--brand-muted: color-mix(in srgb, var(--wp--preset--color--primary) 10%, transparent);
+	--wp--custom--semantic--focus-ring: var(--wp--preset--color--primary);
+	--wp--custom--semantic--on-accent: var(--wp--preset--color--main);
+	--wp--custom--semantic--brand-button: var(--wp--preset--color--primary-alt);
+	--wp--custom--semantic--brand-button-text: var(--wp--preset--color--main);
+	--wp--custom--semantic--marker: var(--wp--preset--color--primary-alt);
+	--wp--custom--semantic--marker-text: currentColor;
+	// Same as theme.json; restated so a light Contrast section in dark mode resets them.
+	--wp--custom--semantic--error: #dc2626;
+	--wp--custom--semantic--success: #16a34a;
+	--wp--custom--semantic--warning: #d97706;
+	--wp--custom--semantic--info: #2563eb;
+}
+
+// The dark brand color is light, so its washes need more strength to show.
+@mixin palette-dark {
+	@include palette( dark );
+	--wp--custom--semantic--brand-muted: color-mix(in srgb, var(--wp--preset--color--primary) 14%, transparent);
+	--wp--custom--semantic--focus-ring: var(--wp--preset--color--primary);
+	--wp--custom--semantic--on-accent: var(--wp--preset--color--base);
+	// Brand sections are the light brand color here, so their buttons stay dark.
+	--wp--custom--semantic--brand-button: var(--wp--preset--color--base);
+	--wp--custom--semantic--brand-button-text: var(--wp--preset--color--main);
+	// A light marker band would sit behind light text, so marked words take the
+	// brand color instead.
+	--wp--custom--semantic--marker: transparent;
+	--wp--custom--semantic--marker-text: var(--wp--preset--color--primary);
+	// Status colors are fixed hues (theme.json), lightened to read on dark surfaces.
+	--wp--custom--semantic--error: #f87171;
+	--wp--custom--semantic--success: #4ade80;
+	--wp--custom--semantic--warning: #fbbf24;
+	--wp--custom--semantic--info: #60a5fa;
+	// The theme.json shadows are soft washes made for light surfaces and vanish
+	// on dark ones, so dark surfaces use stronger ones.
+	--wp--preset--shadow--small: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+	--wp--preset--shadow--medium: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+	--wp--preset--shadow--large: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+	--wp--preset--shadow--x-large: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+}
+
+// Semantic aliases are resolved where they are declared (:root), so an element
+// that swaps the palette must declare them again to pick up the new colors.
+@mixin semantic-aliases {
+	--wp--custom--semantic--text-primary: var(--wp--preset--color--main);
+	--wp--custom--semantic--text-secondary: var(--wp--preset--color--main-accent);
+	--wp--custom--semantic--text-tertiary: var(--wp--preset--color--secondary);
+	--wp--custom--semantic--surface-0: var(--wp--preset--color--base);
+	--wp--custom--semantic--surface-1: var(--wp--preset--color--tertiary);
+	--wp--custom--semantic--surface-2: var(--wp--preset--color--border-light);
+	--wp--custom--semantic--surface-3: var(--wp--preset--color--border-dark);
+	--wp--custom--semantic--border: var(--wp--preset--color--border-light);
+	--wp--custom--semantic--border-hover: var(--wp--preset--color--border-dark);
+	--wp--custom--semantic--brand: var(--wp--preset--color--primary);
+	--wp--custom--semantic--brand-hover: var(--wp--preset--color--primary-accent);
+	--wp--custom--semantic--input-bg: var(--wp--custom--semantic--surface-1);
+	--wp--custom--semantic--input-border: var(--wp--custom--semantic--border);
+	--wp--custom--semantic--input-text: var(--wp--custom--semantic--text-primary);
+	--wp--custom--semantic--input-placeholder: var(--wp--custom--semantic--text-tertiary);
+}

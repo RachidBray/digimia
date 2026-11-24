@@ -1,0 +1,261 @@
+@use 'mixins';
+
+/* ============================================================================
+   Product page — single download templates (template-download-*)
+   ========================================================================= */
+
+// Shared check icon for the purchase assurances (Phosphor check-circle).
+$check-circle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M173.66 98.34a8 8 0 0 1 0 11.32l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 0M232 128A104 104 0 1 1 128 24a104.11 104.11 0 0 1 104 104m-16 0a88 88 0 1 0-88 88 88.1 88.1 0 0 0 88-88'/%3E%3C/svg%3E");
+
+/* Purchase and details cards
+   ------------------------------------------------------------------------- */
+
+.digimia-purchase-card,
+.digimia-details-card {
+	@include mixins.panel;
+}
+
+.digimia-purchase-card {
+	box-shadow: var(--wp--shadow--small);
+	// Clear the sticky header when a "Buy" link jumps here.
+	scroll-margin-top: calc(var(--wp-admin--admin-bar--height, 0px) + 6rem);
+
+	.digimia-product-price {
+		margin-bottom: 0;
+		font-family: var(--wp--preset--font-family--heading, inherit);
+		font-weight: 700;
+		line-height: 1.1;
+		letter-spacing: -0.02em;
+	}
+
+	// One full-width button: it is the card's only action.
+	.edd_purchase_submit_wrapper,
+	.edd-submit,
+	.edd_go_to_checkout {
+		width: 100%;
+	}
+}
+
+// Guide: the cover image runs to the card's edges above the price. Two
+// classes, to outrank the flow layout's first-child `margin-block-start: 0`.
+.digimia-purchase-card .digimia-purchase-card__media {
+	width: calc(100% + 2 * var(--wp--preset--spacing--large));
+	max-width: none;
+	margin: calc(-1 * var(--wp--preset--spacing--large)) calc(-1 * var(--wp--preset--spacing--large)) 0;
+	overflow: hidden;
+	border-radius: calc(var(--wp--custom--radius--lg) - 1px) calc(var(--wp--custom--radius--lg) - 1px) 0 0;
+}
+
+.digimia-purchase-assurances {
+	display: grid;
+	gap: 0.4rem;
+	margin-bottom: 0;
+	padding: 0;
+	color: var(--wp--custom--semantic--text-secondary);
+	list-style: none;
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		margin: 0;
+
+		&::before {
+			content: "";
+			flex: none;
+			width: 1.15em;
+			height: 1.15em;
+			background: var(--wp--custom--semantic--success);
+			-webkit-mask: $check-circle center / contain no-repeat;
+			mask: $check-circle center / contain no-repeat;
+		}
+	}
+}
+
+.digimia-details-card__title {
+	margin: 0 0 0.25rem;
+}
+
+// Label left, value right, a hairline between rows. Rows without a value
+// are removed in PHP (inc/edd-product.php).
+.digimia-detail-row {
+	gap: var(--wp--preset--spacing--medium);
+	padding-block: 0.7rem;
+	font-size: var(--wp--preset--font-size--small);
+	line-height: 1.4;
+
+	+ .digimia-detail-row {
+		border-top: 1px solid var(--wp--custom--semantic--border);
+	}
+
+	> * {
+		margin: 0;
+	}
+
+	> :last-child {
+		color: var(--wp--custom--semantic--text-primary);
+		font-weight: 500;
+		text-align: end;
+	}
+}
+
+.digimia-detail-label {
+	flex: none;
+	color: var(--wp--custom--semantic--text-secondary);
+}
+
+.digimia-details-card__tags {
+	margin-top: var(--wp--preset--spacing--small);
+	padding-top: var(--wp--preset--spacing--medium);
+	border-top: 1px solid var(--wp--custom--semantic--border);
+	gap: 0.4rem;
+
+	a {
+		padding: 0.25rem 0.7rem;
+		font-size: var(--wp--preset--font-size--x-small);
+	}
+}
+
+/* Title area
+   ------------------------------------------------------------------------- */
+
+.digimia-product-eyebrow a {
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+// Facts under the title: "3 files · FIG, PDF · Updated Mar 2, 2026".
+.digimia-product-meta {
+	color: var(--wp--custom--semantic--text-secondary);
+	font-size: var(--wp--preset--font-size--small);
+
+	&:not(:has(*)) {
+		display: none;
+	}
+
+	> * {
+		margin: 0;
+	}
+
+	> * + *::before {
+		content: "·";
+		margin-inline-end: var(--wp--preset--spacing--small);
+		color: var(--wp--custom--semantic--text-tertiary);
+	}
+
+	.digimia-product-meta__updated > * {
+		margin: 0;
+	}
+
+	// Core prints no date until the product is edited after publishing:
+	// no orphaned "Updated" label then.
+	.digimia-product-meta__updated:not(:has(time)) {
+		display: none;
+	}
+}
+
+// Banner: price and a button that jumps to the purchase card, so the price
+// shows without scrolling. Stacked, the card follows the banner directly.
+.digimia-hero-buy__price {
+	margin: 0;
+	font-family: var(--wp--preset--font-family--heading, inherit);
+	font-weight: 700;
+	line-height: 1.1;
+}
+
+@media (max-width: 781px) {
+	.digimia-hero-buy {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	html:has(.digimia-purchase-card) {
+		scroll-behavior: smooth;
+	}
+}
+
+// Showcase: the preview sits in a soft frame, like a screenshot on a desk.
+.digimia-showcase-media {
+	margin: 0;
+	padding: clamp(0.75rem, 2.5vw, var(--wp--preset--spacing--large));
+	border: 1px solid var(--wp--custom--semantic--border);
+	border-radius: var(--wp--custom--radius--lg);
+	background: var(--wp--custom--semantic--surface-1);
+
+	img {
+		border-radius: var(--wp--custom--radius--base);
+		box-shadow: var(--wp--shadow--medium);
+	}
+}
+
+// Guide: the title band is tinted across the full page width, behind the
+// floating purchase card. The shadow paints the band past the column; the
+// clip keeps it to the band's own height.
+.digimia-guide-band {
+	background: var(--wp--custom--semantic--surface-1);
+	box-shadow: 0 0 0 100vmax var(--wp--custom--semantic--surface-1);
+	clip-path: inset(0 -100vmax);
+}
+
+/* Layout: description beside a sticky aside
+   ------------------------------------------------------------------------- */
+
+@media (min-width: 782px) {
+	.digimia-product-layout > .digimia-product-aside {
+		position: sticky;
+		top: calc(var(--wp-admin--admin-bar--height, 0px) + 6rem);
+		align-self: flex-start;
+	}
+
+	.digimia-guide-body {
+		padding-top: var(--wp--preset--spacing--xx-large);
+	}
+
+	// The floating card starts level with the breadcrumbs in the band.
+	.digimia-guide-aside {
+		padding-top: var(--wp--preset--spacing--x-large);
+	}
+
+	.digimia-guide .digimia-product-layout > .digimia-guide-aside {
+		top: calc(var(--wp-admin--admin-bar--height, 0px) + 4.5rem);
+	}
+}
+
+// Stacked: buying comes right after the title, before the description, and
+// the details follow the description. The columns step aside
+// (display: contents) so their blocks can be ordered.
+@media (max-width: 781px) {
+	.digimia-product-layout {
+		> .wp-block-column {
+			display: contents;
+		}
+
+		> .wp-block-column > * {
+			flex-basis: 100%;
+			width: 100%;
+			margin-block: 0;
+		}
+
+		.digimia-product-hero {
+			order: -2;
+		}
+
+		.digimia-purchase-card {
+			order: -1;
+		}
+
+		.digimia-details-card {
+			order: 1;
+		}
+	}
+
+	// Guide: the band is followed by the card, so it needs room below it.
+	.digimia-guide .digimia-product-layout {
+		row-gap: var(--wp--preset--spacing--large);
+	}
+
+}

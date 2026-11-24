@@ -1,0 +1,3 @@
+.wp-block-breadcrumbs{color:var(--wp--custom--semantic--text-secondary);font-size:var(--wp--preset--font-size--small)}.wp-block-breadcrumbs li:not(:last-child)::after{margin:0 .6em;color:var(--wp--custom--semantic--text-tertiary);opacity:1}.wp-block-breadcrumbs a{color:inherit;text-decoration:none}.wp-block-breadcrumbs a:hover{color:var(--wp--custom--semantic--text-primary);text-decoration:underline}.wp-block-breadcrumbs [aria-current=page]{color:var(--wp--custom--semantic--text-primary)}
+
+/*# sourceMappingURL=core-breadcrumbs.css.map*/

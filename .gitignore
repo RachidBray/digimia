@@ -1,0 +1,36 @@
+node_modules/
+/vendor/
+.DS_Store
+*.log
+
+# Editor state, but keep the shared settings
+/.vscode/*
+!/.vscode/settings.json
+
+# Build cache
+dist-temp/
+.yarn/
+.pnp.*
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+*.local.json
+
+# AI assistant local state (may contain tokens, credentials, absolute paths)
+.claude/settings.local.json
+.mcp.local.json
+
+# WordPress runtime artifacts
+uploads/
+.cache/
+
+# Visual regression screenshots (tests/visual): local to each machine
+/tests/visual/output/
+/tests/visual/baseline/
+/tests/visual/baseline-*/
+
+# Third-party reference themes/plugins (local research only, never shipped)
+/ref/
+/digimia.zip

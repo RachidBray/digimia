@@ -1,0 +1,589 @@
+// EDD checkout: the form in panels on the left, the order summary on the right
+// (inc/edd.php makes two columns the default), in theme type and tokens.
+// Rules hang off `#edd_checkout_form_wrap.wp-block-edd-checkout` so they outrank
+// EDD's ID selectors (`#edd_checkout_form_wrap fieldset`, labels, descriptions)
+// without !important.
+
+// EDD sets 70% width and 4px / 6px padding with an ID selector (specificity 1-3-1).
+// `.cfm-form` is the personal info fieldset when Checkout Fields Manager is active.
+body .wp-block-edd-checkout #edd_purchase_form :is(.edd-blocks-form, .cfm-form) :is(input[type="email"], input[type="password"], input[type="tel"], input[type="text"], input[type="url"], input[type="number"], input[type="date"], select, textarea) {
+	width: 100%;
+	// Checkout Fields Manager fixes selects at 2em, which clips the text.
+	height: auto;
+	padding: 10px 12px;
+}
+
+#edd_checkout_form_wrap.wp-block-edd-checkout {
+	gap: var(--wp--preset--spacing--large);
+
+	// Form beside a wider summary than EDD's 2:1, so item names fit.
+	@media (min-width: 782px) {
+		&.edd-checkout__layout--two-thirds {
+			grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+			column-gap: var(--wp--preset--spacing--x-large);
+		}
+
+		&:not(.edd-checkout__layout--full) .edd-blocks__cart {
+			position: sticky;
+			top: var(--wp--preset--spacing--large);
+			align-self: start;
+		}
+	}
+
+	.edd-blocks__logged-in {
+		margin: 0;
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+	}
+
+	/* Order summary
+	------------------------------------------------------------------------ */
+
+	// The panel's padding is the only padding: rows keep their vertical rhythm.
+	.edd-blocks-form__cart #edd_checkout_cart {
+		display: flex;
+		flex-direction: column;
+		padding-block: var(--wp--preset--spacing--small);
+		border: 1px solid var(--wp--custom--semantic--border);
+		border-radius: var(--wp--custom--radius--lg);
+		background: var(--wp--custom--semantic--surface-0);
+	}
+
+	.edd-blocks-cart__row {
+		align-items: center;
+		padding-block: var(--wp--preset--spacing--medium);
+		padding-inline: 0;
+		border-bottom: 1px solid var(--wp--custom--semantic--border);
+	}
+
+	// Item and price on one line in the narrow summary column (EDD wraps them).
+	.edd-blocks-cart__row-item {
+		flex-wrap: nowrap;
+
+		.edd_cart_item_name {
+			flex: 1;
+			min-width: 0;
+		}
+
+		.edd_cart_item_price {
+			flex: 0 0 auto;
+		}
+	}
+
+	.edd-blocks-cart__items .edd-blocks-cart__row:last-child {
+		border-bottom: 0;
+	}
+
+	.edd-blocks-cart__items {
+		border-bottom: 1px solid var(--wp--custom--semantic--border);
+	}
+
+	// Column labels as a quiet eyebrow, not a table header.
+	.edd-blocks-cart__row-header {
+		padding-block: var(--wp--preset--spacing--small);
+		color: var(--wp--custom--semantic--text-tertiary);
+		font-size: var(--wp--preset--font-size--x-small);
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.edd_cart_item_image img {
+		width: 3rem;
+		height: 3rem;
+		border-radius: var(--wp--custom--radius--sm);
+		object-fit: cover;
+	}
+
+	.edd_checkout_cart_item_title {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 600;
+		line-height: var(--wp--custom--line-height--snug);
+	}
+
+	.edd_cart_item_price {
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--small);
+	}
+
+	// Remove button: EDD draws a fixed black trash icon as a background, which
+	// disappears in dark mode. Paint the theme's trash icon (Phosphor, from
+	// assets/icons/) in the current text color instead.
+	.edd_cart_actions a.edd-blocks-cart__action-remove {
+		width: 1.125rem;
+		height: 1.125rem;
+		background: currentColor;
+		color: var(--wp--custom--semantic--text-tertiary);
+		opacity: 1;
+		-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0'/%3E%3C/svg%3E") center / contain no-repeat;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0'/%3E%3C/svg%3E") center / contain no-repeat;
+
+		&:hover {
+			color: var(--wp--custom--semantic--error);
+		}
+	}
+
+	.edd-blocks-cart__row-footer {
+		border-bottom: 0;
+	}
+
+	// "Total:" is a bare text node: it takes the label style, the amount the value style.
+	.edd_cart_total {
+		display: flex;
+		flex: 1;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--wp--preset--spacing--small);
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 600;
+
+		.edd_cart_amount {
+			color: var(--wp--custom--semantic--text-primary);
+			font-family: var(--wp--preset--font-family--heading);
+			font-size: var(--wp--preset--font-size--medium);
+			font-weight: 600;
+		}
+	}
+
+	// Column labels stay on one line at both edges, also on phones.
+	.edd-blocks-cart__row-header {
+		flex-wrap: nowrap;
+		justify-content: space-between;
+
+		// A flex box in EDD, right-aligned only from 480px; and the eyebrow
+		// color, not the item price color.
+		.edd_cart_item_price {
+			justify-content: flex-end;
+			color: inherit;
+			font-size: inherit;
+		}
+	}
+
+	/* Discounts
+	------------------------------------------------------------------------ */
+
+	// An applied discount reads like the Total row: label left, amount right.
+	.edd_cart_discount {
+		display: flex;
+		flex: 1;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--wp--preset--spacing--small);
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 600;
+
+		.edd_discount {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			margin: 0;
+			color: var(--wp--custom--semantic--text-primary);
+		}
+
+		.edd_discount_rate {
+			color: var(--wp--custom--semantic--text-tertiary);
+			font-weight: 400;
+		}
+	}
+
+	// Remove-discount: the theme trash icon in the text color (EDD's is fixed black).
+	a.edd_discount_remove {
+		width: 1rem;
+		height: 1rem;
+		background: currentColor;
+		color: var(--wp--custom--semantic--text-tertiary);
+		opacity: 1;
+		-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0'/%3E%3C/svg%3E") center / contain no-repeat;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M216 48h-40v-8a24 24 0 0 0-24-24h-48a24 24 0 0 0-24 24v8H40a8 8 0 0 0 0 16h8v144a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16V64h8a8 8 0 0 0 0-16M96 40a8 8 0 0 1 8-8h48a8 8 0 0 1 8 8v8H96Zm96 168H64V64h128Zm-80-104v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m48 0v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0'/%3E%3C/svg%3E") center / contain no-repeat;
+
+		&:hover {
+			color: var(--wp--custom--semantic--error);
+		}
+	}
+
+	.edd-blocks-cart__discount {
+		padding-block: var(--wp--preset--spacing--medium) 0;
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+	}
+
+	// Code field across the row with an outline Apply at the same height; the
+	// error spans the row. EDD shows and hides these with inline styles.
+	// The code area sits in one of EDD's flex rows: take the whole row.
+	#edd_discount_code,
+	#edd-discount-code-wrap {
+		flex: 1 1 100%;
+		width: 100%;
+	}
+
+	.edd-discount-code-field-wrap {
+		display: flex;
+		gap: 0.5rem;
+		width: 100%;
+
+		// Theme field size (EDD: 4px / 6px through an ID selector).
+		input#edd-discount {
+			flex: 1;
+			min-width: 0;
+			width: auto;
+			padding: 10px 12px;
+			font-size: 1rem;
+		}
+
+		// EDD gives it `.wp-block-button__link`, whose `height: 100%` collapses here.
+		.edd-apply-discount {
+			flex-shrink: 0;
+			align-self: stretch;
+			height: auto;
+			padding: 0 1.25rem;
+			line-height: 1;
+			border: 0;
+			background: transparent;
+			box-shadow: inset 0 0 0 2px currentColor;
+			color: var(--wp--custom--semantic--text-primary);
+			font-size: var(--wp--preset--font-size--small);
+		}
+	}
+
+	// EDD makes it inline-block by ID, which hides the alert icon; EDD's inline
+	// `display: none` still hides it while empty.
+	#edd-discount-error-wrap {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		margin-top: 0.75rem;
+		padding: 0.75rem 1rem;
+	}
+
+	/* Form panels: one style, numbered steps
+	------------------------------------------------------------------------ */
+
+	#edd_purchase_form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--medium);
+		counter-reset: digimia-step;
+	}
+
+	// The form's gap is the only spacing between panels and the payment
+	// buttons: drop EDD's own margins (`.edd-blocks__checkout-user` 2rem,
+	// `#edd_checkout_form_wrap fieldset > div` 21px).
+	#edd_purchase_form :is(.edd-blocks__checkout-user, fieldset > div) {
+		margin: 0;
+	}
+
+	// The payment panel and the purchase area (gateway errors, PayPal buttons,
+	// Purchase) share one wrapper, so it takes the same gap as the form.
+	.edd-blocks__payment-details {
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--medium);
+	}
+
+	// An empty error wrapper must not add a second gap.
+	#edd-paypal-errors-wrap:empty {
+		display: none;
+	}
+
+	// With Checkout Fields Manager the personal info moves into its own
+	// fieldset and EDD's user details wrapper stays empty: no second gap.
+	.edd-blocks__user-details:not(:has(input, select, textarea, p, a, button)) {
+		display: none;
+	}
+
+	// Personal info and payment method (and any gateway fieldsets) as panels.
+	#edd_purchase_form :is(fieldset.edd-blocks-form, #edd_checkout_user_info, #edd_payment_mode_select) {
+		display: grid;
+		gap: var(--wp--preset--spacing--medium);
+		margin: 0;
+		padding: var(--wp--preset--spacing--large);
+		border: 1px solid var(--wp--custom--semantic--border);
+		border-radius: var(--wp--custom--radius--lg);
+		background: var(--wp--custom--semantic--surface-0);
+
+		fieldset {
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
+		> legend {
+			display: flex;
+			float: inline-start;
+			align-items: center;
+			gap: 0.75rem;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+			color: var(--wp--custom--semantic--text-primary);
+			font-family: var(--wp--preset--font-family--heading);
+			font-size: var(--wp--preset--font-size--lead);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--snug);
+			white-space: normal;
+			counter-increment: digimia-step;
+
+			&::before {
+				display: inline-flex;
+				flex-shrink: 0;
+				align-items: center;
+				justify-content: center;
+				width: 1.75rem;
+				height: 1.75rem;
+				border-radius: var(--wp--custom--radius--full);
+				background: var(--wp--custom--semantic--brand-muted);
+				color: var(--wp--preset--color--primary);
+				font-family: var(--wp--preset--font-family--primary);
+				font-size: var(--wp--preset--font-size--small);
+				font-weight: 600;
+				content: counter(digimia-step);
+			}
+		}
+	}
+
+	// First and last name side by side from 600px.
+	@media (min-width: 600px) {
+		#edd_checkout_user_info {
+			grid-template-columns: 1fr 1fr;
+
+			> :not(.edd-blocks-form__group-edd_first, .edd-blocks-form__group-edd_last, #edd-first-name-wrap, #edd-last-name-wrap) {
+				grid-column: 1 / -1;
+			}
+		}
+	}
+
+	#edd_purchase_form .edd-blocks-form__group {
+		margin: 0;
+	}
+
+	/* Checkout Fields Manager fields
+	------------------------------------------------------------------------ */
+
+	// CFM prints label, help text, then the field. The help text moves under
+	// the field as in EDD's own form, so paired fields line up.
+	#edd_checkout_user_info .cfm-el {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+
+		> .edd-description {
+			order: 1;
+		}
+	}
+
+	// Radio and checkbox options: a stacked list of theme controls.
+	#edd_checkout_user_info .cfm-checkbox-checklist {
+		display: grid;
+		gap: 0.6rem;
+		margin: 0.2rem 0 0;
+		padding: 0;
+		list-style: none;
+
+		li {
+			display: flex;
+			align-items: center;
+			gap: 0.6rem;
+			margin: 0;
+		}
+
+		label {
+			margin: 0;
+			color: var(--wp--custom--semantic--text-primary);
+			font-size: var(--wp--preset--font-size--small);
+			font-weight: 400;
+			cursor: pointer;
+		}
+	}
+
+	// A section break opens a sub-group inside the panel, under a hairline.
+	#edd_checkout_user_info .section_break {
+		padding-top: var(--wp--preset--spacing--medium);
+		border-top: 1px solid var(--wp--custom--semantic--border);
+
+		.cfm-section-title {
+			margin: 0;
+			color: var(--wp--custom--semantic--text-primary);
+			font-family: var(--wp--preset--font-family--heading);
+			font-size: var(--wp--preset--font-size--base);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--snug);
+		}
+
+		.cfm-section-details {
+			margin-top: 0.25rem;
+			color: var(--wp--custom--semantic--text-tertiary);
+			font-size: var(--wp--preset--font-size--small);
+		}
+	}
+
+	#edd_checkout_user_info textarea {
+		min-height: 6rem;
+		resize: vertical;
+	}
+
+	// CFM draws selects with a fixed grey border and 3px corners.
+	#edd_checkout_user_info select {
+		border-radius: var(--wp--custom--radius--base);
+
+		&:not(:hover, :focus) {
+			border-color: var(--wp--custom--semantic--input-border);
+		}
+	}
+
+	// EDD drops the radio border by ID, so an unchecked radio disappears.
+	#edd_checkout_user_info input[type="radio"] {
+		border: 1px solid var(--wp--custom--semantic--border-hover);
+
+		&:checked {
+			border-color: var(--wp--preset--color--primary);
+		}
+	}
+
+	// Labels as on the sign-in forms (EDD: 95%, bold, via an ID selector).
+	#edd_purchase_form label.edd-label {
+		margin: 0 0 0.4rem;
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 600;
+		line-height: var(--wp--custom--line-height--snug);
+	}
+
+	#edd_purchase_form .edd-description {
+		margin: 0.4rem 0 0;
+		color: var(--wp--custom--semantic--text-tertiary);
+		font-size: var(--wp--preset--font-size--x-small);
+		line-height: var(--wp--custom--line-height--snug);
+	}
+
+	// Placeholders repeat the labels, so they stay faint.
+	#edd_purchase_form input::placeholder {
+		opacity: 0.45;
+	}
+
+	/* Payment method: selectable cards with a radio mark
+	------------------------------------------------------------------------ */
+
+	#edd-payment-mode-wrap {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+		gap: 0.75rem;
+	}
+
+	#edd-payment-mode-wrap label.edd-gateway-option {
+		justify-content: flex-start;
+		gap: 0.75rem;
+		min-height: 3.25rem;
+		margin: 0;
+		padding: 0.75rem 1rem;
+		border: 1px solid var(--wp--custom--semantic--border-hover);
+		border-radius: var(--wp--custom--radius--base);
+		background: var(--wp--custom--semantic--surface-0);
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 600;
+		transition: border-color var(--wp--custom--transition), background-color var(--wp--custom--transition), box-shadow var(--wp--custom--transition);
+
+		// The radio mark (EDD hides the real input but keeps it focusable).
+		&::before {
+			flex-shrink: 0;
+			width: 1.125rem;
+			height: 1.125rem;
+			border: 1px solid var(--wp--custom--semantic--border-hover);
+			border-radius: var(--wp--custom--radius--full);
+			background: var(--wp--custom--semantic--surface-0);
+			content: "";
+			transition: border-color var(--wp--custom--transition), box-shadow var(--wp--custom--transition);
+		}
+
+		&:hover {
+			transform: none;
+			border-color: var(--wp--custom--semantic--text-tertiary);
+			background: var(--wp--custom--semantic--surface-0);
+		}
+
+		&.edd-gateway-option-selected {
+			border-color: var(--wp--preset--color--primary);
+			background: var(--wp--custom--semantic--brand-muted);
+			box-shadow: inset 0 0 0 1px var(--wp--preset--color--primary);
+
+			&::before {
+				border-color: var(--wp--preset--color--primary);
+				box-shadow: inset 0 0 0 4px var(--wp--preset--color--primary);
+			}
+		}
+
+		&:has(input:focus-visible) {
+			outline: 2px solid var(--wp--custom--semantic--focus-ring);
+			outline-offset: 2px;
+		}
+
+		.edd-payment-icons {
+			margin-inline-start: auto;
+		}
+	}
+
+	/* Purchase
+	------------------------------------------------------------------------ */
+
+	#edd_purchase_form_wrap,
+	#edd_purchase_submit {
+		display: grid;
+		gap: 0.75rem;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	// "Purchase Total" above the button: label and amount on one row.
+	#edd_final_total_wrap {
+		display: flex;
+		justify-content: space-between;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+
+		strong {
+			font-weight: 600;
+		}
+
+		.edd_cart_amount {
+			color: var(--wp--custom--semantic--text-primary);
+			font-weight: 700;
+		}
+	}
+
+	#edd-purchase-button {
+		width: 100%;
+	}
+
+	// PayPal's buttons and wallet buttons: full width. `color-scheme: light`
+	// keeps PayPal's frames transparent: a light frame inside a dark page gets
+	// an opaque white backdrop.
+	:is(#edd-paypal-container, .edd-paypal-wallet-container, #edd-paypal-messages) {
+		width: 100%;
+		color-scheme: light;
+	}
+
+	// Google Pay renders in the page (PayPal's buttons are framed), so it can
+	// take the pill shape too; Google's guidelines allow a custom corner radius.
+	#edd-paypal-googlepay-container .gpay-button {
+		border-radius: var(--wp--custom--radius--full);
+	}
+
+	#edd-paypal-messages {
+		margin-top: 0.5rem;
+	}
+
+	.edd-alert {
+		margin: 0;
+	}
+}

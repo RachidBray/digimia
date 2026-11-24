@@ -1,0 +1,13 @@
+{
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.DS_Store": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/assets/styles/*.map": true
+  },
+  "files.eol": "\n",
+  "editor.insertSpaces": false,
+  "editor.tabSize": 4
+}

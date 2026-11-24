@@ -1,0 +1,45 @@
+/* ============================================================================
+   Theme Toggle Button — theme.json Driven
+   ========================================================================= */
+
+.digimia-theme-toggle {
+    display: block;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    width: auto;
+    height: auto;
+    color: inherit;
+    cursor: pointer;
+    transition: color var(--wp--custom--transition);
+
+    svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        display: block;
+        vertical-align: middle; /* Ensure icons align properly */
+    }
+
+    .icon-sun {
+        display: none;
+    }
+
+    .icon-moon {
+        display: block;
+    }
+}
+
+[data-theme="light"] .digimia-theme-toggle {
+    .icon-sun {
+        display: block;
+    }
+
+    .icon-moon {
+        display: none;
+    }
+}

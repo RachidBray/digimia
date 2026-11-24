@@ -1,0 +1,33 @@
+name: WPCS check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  phpcs:
+    name: WPCS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+
+      # Same tools and ruleset (phpcs.xml.dist) as `composer run wpcs:scan` locally.
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: PHP syntax
+        run: composer run lint
+
+      - name: WordPress coding standards
+        run: composer run wpcs:scan
+
+      # The theme supports PHP 7.4 or later (style.css, readme.txt).
+      - name: PHP 7.4 compatibility
+        run: vendor/bin/phpcs --standard=PHPCompatibilityWP --runtime-set testVersion 7.4- functions.php index.php inc blocks

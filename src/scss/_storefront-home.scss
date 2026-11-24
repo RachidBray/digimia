@@ -1,0 +1,61 @@
+.digimia-home-hero {
+	overflow: hidden;
+
+	.digimia-home-copy {
+		max-width: 39rem;
+	}
+
+	.digimia-home-intro {
+		max-width: 34rem;
+	}
+
+	// Store UI cards (digimia-ui-store.svg); their shadows draw past the image.
+	.digimia-home-ui {
+		margin: 0;
+	}
+}
+
+.digimia-home-principles {
+	.digimia-principle {
+		padding-top: var(--wp--preset--spacing--medium);
+		border-top: 1px solid var(--wp--custom--semantic--border);
+
+		p:last-child {
+			max-width: 30rem;
+			color: var(--wp--custom--semantic--text-secondary);
+		}
+	}
+}
+
+.digimia-journal-hero {
+
+	.digimia-journal-hero-art {
+		margin: 0;
+
+		img {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+}
+
+@media (max-width: 781px) {
+	.digimia-home-hero {
+		.digimia-home-copy {
+			max-width: 100%;
+		}
+
+		.digimia-home-ui {
+			max-width: 38rem;
+			margin: var(--wp--preset--spacing--large) auto 0;
+		}
+	}
+
+	.digimia-journal-hero {
+		.digimia-journal-hero-art {
+			max-width: 38rem;
+			margin: var(--wp--preset--spacing--large) auto 0;
+		}
+	}
+}

@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+#
+# Digimia pre-commit guard.
+#
+# Blocks commits that contain likely secrets. This is a safety net, not a
+# replacement for reading the diff. See docs/ai/security.md.
+#
+# Activate once per clone:
+#   git config core.hooksPath .githooks
+#
+# Bypass only when you are certain the match is a false positive:
+#   git commit --no-verify
+
+set -euo pipefail
+
+red=$'\033[31m'
+yellow=$'\033[33m'
+reset=$'\033[0m'
+
+# Never scan these paths: documented placeholders and generated noise.
+EXCLUDE_RE='(^|/)(\.env\.example|package-lock\.json|yarn\.lock|composer\.lock|.*\.map|.*\.min\.(js|css))$'
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+if [ -z "$staged" ]; then
+	exit 0
+fi
+
+fail=0
+
+# Each file is scanned as staged: that is what gets committed, even when the
+# copy on disk has changed since `git add`.
+staged_copy=$(mktemp)
+trap 'rm -f "$staged_copy"' EXIT
+
+flag() {
+	fail=1
+	printf '%s  ✖ %s: %s%s\n' "$red" "$1" "$2" "$reset"
+}
+
+while IFS= read -r file; do
+	if printf '%s' "$file" | grep -Eq "$EXCLUDE_RE"; then
+		continue
+	fi
+
+	git show ":$file" > "$staged_copy" 2>/dev/null || continue
+
+	# Only read text files; skip binaries.
+	if ! grep -Iq . "$staged_copy" 2>/dev/null; then
+		continue
+	fi
+
+	# WordPress Application Passwords: six groups of four letters and digits
+	# ("xxxx xxxx xxxx xxxx xxxx xxxx"). Six four-letter words in a row also
+	# happen in prose, so a match needs a digit, or a capital letter inside a
+	# group, as nearly every real password has. The second grep reads all its
+	# input (no -q) so the first never stops early and fails the pipeline.
+	if grep -oE '(^|[^A-Za-z0-9])[A-Za-z0-9]{4}( [A-Za-z0-9]{4}){5}([^A-Za-z0-9]|$)' "$staged_copy" | grep -E '[0-9]|[A-Za-z0-9][A-Z]' >/dev/null; then
+		flag "$file" "possible WordPress Application Password"
+	fi
+
+	# Credential assignments with an inline value.
+	if grep -nEi '(WP_API_PASSWORD|WP_API_USERNAME|VISUAL_TEST_PASSWORD|VISUAL_TEST_COOKIE|APPLICATION_PASSWORD|DB_PASSWORD|AUTH_KEY|SECURE_AUTH_KEY|LOGGED_IN_KEY)\s*[:=]\s*["'"'"']?[^ "'"'"'$#{]' "$staged_copy"; then
+		flag "$file" "hardcoded WordPress credential"
+	fi
+
+	# Generic secret assignments.
+	if grep -nEi '(api[_-]?key|api[_-]?secret|access[_-]?token|client[_-]?secret|password|passwd|secret)\s*[:=]\s*["'"'"'][A-Za-z0-9_\-\.]{16,}["'"'"']' "$staged_copy"; then
+		flag "$file" "hardcoded secret-looking assignment"
+	fi
+
+	# Private keys.
+	if grep -nE 'BEGIN (RSA |EC |OPENSSH |PGP )?PRIVATE KEY' "$staged_copy"; then
+		flag "$file" "private key material"
+	fi
+
+	# Common provider token prefixes.
+	if grep -nE '(ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|sk-ant-[A-Za-z0-9_\-]{20,}|sk-[A-Za-z0-9]{32,}|AKIA[0-9A-Z]{16})' "$staged_copy"; then
+		flag "$file" "provider API token"
+	fi
+done <<< "$staged"
+
+if [ "$fail" -ne 0 ]; then
+	printf '\n%sCommit blocked: potential secrets detected.%s\n' "$yellow" "$reset"
+	printf 'Remove the value, move it to .env, and rotate it if it was ever real.\n'
+	printf 'False positive? Use: git commit --no-verify\n'
+	exit 1
+fi
+
+exit 0

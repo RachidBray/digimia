@@ -1,0 +1,136 @@
+@use '../mixins';
+
+// Category tiles: product-card surface, whole tile clickable, arrow on hover.
+.wp-block-edd-terms.digimia-term-grid {
+	gap: var(--wp--preset--spacing--large);
+
+	@media (min-width: 600px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	@media (min-width: 960px) {
+		&.edd-blocks__columns-3 {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		&.edd-blocks__columns-4 {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+
+	.edd-blocks__term {
+		@include mixins.product-card;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--medium);
+
+		&:hover {
+			.edd-blocks__image img {
+				transform: scale(1.03);
+			}
+
+			.edd-blocks__term-title::after {
+				background: var(--wp--preset--color--primary);
+				color: var(--wp--preset--color--base);
+				transform: translateX(0.2rem);
+			}
+
+			.edd-blocks__term-title:dir(rtl)::after {
+				transform: translateX(-0.2rem);
+			}
+		}
+	}
+
+	// The category image as uploaded: no backdrop, no crop, rounded corners.
+	.edd-blocks__image {
+		@include mixins.product-card-media;
+		background: none;
+
+		a {
+			display: block;
+		}
+
+		img {
+			height: auto;
+			aspect-ratio: auto;
+			border-radius: var(--wp--custom--radius--base);
+		}
+	}
+
+	// Title, count, and a round arrow on one row.
+	.edd-blocks__term-title {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+
+		h3 {
+			@include mixins.product-card-title;
+		}
+
+		// Stretch the title link over the whole tile.
+		h3 a::after {
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+			content: "";
+		}
+
+		&::after {
+			display: inline-flex;
+			flex-shrink: 0;
+			align-items: center;
+			justify-content: center;
+			width: 2.25rem;
+			height: 2.25rem;
+			margin-inline-start: auto;
+			border-radius: var(--wp--custom--radius--full);
+			background: var(--wp--custom--semantic--brand-muted);
+			color: var(--wp--preset--color--primary);
+			font-weight: 600;
+			content: "\2192";
+			transition: background-color var(--wp--custom--transition), color var(--wp--custom--transition), transform var(--wp--custom--transition);
+		}
+
+		&:dir(rtl)::after {
+			content: "\2190";
+		}
+	}
+
+	.edd-blocks__term-count {
+		color: var(--wp--custom--semantic--text-tertiary);
+		font-size: var(--wp--preset--font-size--small);
+	}
+}
+
+// Category chips (no thumbnails), e.g. under the store search.
+.wp-block-edd-terms.digimia-term-chips {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.5rem;
+	margin-top: var(--wp--preset--spacing--medium);
+
+	// Paragraphs on the front end (inc/edd.php), h3 in the editor preview.
+	.edd-blocks__term-title :is(p, h3) {
+		margin: 0;
+		font-size: var(--wp--preset--font-size--x-small);
+		line-height: var(--wp--custom--line-height--snug);
+		font-weight: 600;
+	}
+
+	a {
+		display: inline-block;
+		padding: 0.35rem 0.85rem;
+		border: 1px solid var(--wp--custom--semantic--border);
+		border-radius: var(--wp--custom--radius--full);
+		color: var(--wp--custom--semantic--text-secondary);
+		text-decoration: none;
+		transition: border-color var(--wp--custom--transition), color var(--wp--custom--transition);
+
+		&:hover {
+			border-color: var(--wp--preset--color--primary);
+			color: var(--wp--custom--semantic--text-primary);
+		}
+	}
+}

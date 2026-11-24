@@ -1,0 +1,83 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Ink",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"name": "Ink",
+					"slug": "primary",
+					"color": "#151515"
+				},
+				{
+					"name": "Ink Hover",
+					"slug": "primary-accent",
+					"color": "#2B2B2B"
+				},
+				{
+					"name": "Vermilion",
+					"slug": "primary-alt",
+					"color": "#FF5A26"
+				},
+				{
+					"name": "Vermilion Wash",
+					"slug": "primary-alt-accent",
+					"color": "#FFE5DB"
+				},
+				{
+					"name": "Black",
+					"slug": "main",
+					"color": "#121212"
+				},
+				{
+					"name": "Graphite",
+					"slug": "main-accent",
+					"color": "#4A4A4A"
+				},
+				{
+					"name": "White",
+					"slug": "base",
+					"color": "#FFFFFF"
+				},
+				{
+					"name": "Stone Grey",
+					"slug": "secondary",
+					"color": "#646460"
+				},
+				{
+					"name": "Smoke",
+					"slug": "tertiary",
+					"color": "#F2F2EF"
+				},
+				{
+					"name": "Border Light",
+					"slug": "border-light",
+					"color": "#E4E4DF"
+				},
+				{
+					"name": "Border Dark",
+					"slug": "border-dark",
+					"color": "#BDBDB4"
+				}
+			]
+		},
+		"custom": {
+			"color": {
+				"dark": {
+					"primary": "#F4F4F0",
+					"primary-accent": "#FFFFFF",
+					"primary-alt": "#FF6A3A",
+					"primary-alt-accent": "#3A1E14",
+					"main": "#F4F4F0",
+					"main-accent": "#BDBDB7",
+					"base": "#0E0E0E",
+					"secondary": "#9C9C96",
+					"tertiary": "#1A1A1A",
+					"border-light": "#2A2A2A",
+					"border-dark": "#3E3E3E"
+				}
+			}
+		}
+	}
+}

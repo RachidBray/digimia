@@ -1,0 +1,90 @@
+@forward 'palette';
+@use 'palette' as *;
+
+/* ============================================================================
+   Dark / Light Mode Custom Properties — theme.json Driven
+   ============================================================================
+   The source of truth for all values is theme.json (settings.custom).
+   These values are generated as --wp--custom--X variables.
+
+   Here, we handle the DARK mode overrides by re-defining the WordPress
+   preset and custom variables, and the Contrast section style, which shows
+   the opposite palette of the current mode.
+   ========================================================================= */
+
+/* Dark mode overrides
+   ========================================================================= */
+
+[data-theme="dark"] {
+	color-scheme: dark;
+}
+
+[data-theme="dark"] body {
+	@include palette-dark;
+	@include semantic-aliases;
+}
+
+/* Section styles (styles/sections/*.json)
+   =========================================================================
+   The JSON files set background and text. These rules adjust the tokens used
+   by everything inside the section, so buttons, links, borders, and muted text
+   stay legible in both modes. */
+
+// The focus ring is the brand color, which a Brand or Accent background
+// shares or nearly matches, so there it takes the section's text color.
+.is-style-section-brand {
+	--wp--custom--semantic--focus-ring: var(--wp--preset--color--base);
+}
+
+.is-style-section-accent,
+.digimia-accent-card {
+	--wp--custom--semantic--focus-ring: var(--wp--preset--color--main);
+}
+
+// Contrast: the opposite palette of the current mode.
+.is-style-section-contrast {
+	@include palette-dark;
+	@include semantic-aliases;
+	color-scheme: dark;
+}
+
+[data-theme="dark"] .is-style-section-contrast {
+	@include palette-light;
+	@include semantic-aliases;
+	color-scheme: light;
+}
+
+// Inside a cover the overlay is the surface; the section style only supplies tokens.
+.wp-block-cover__inner-container > .is-style-section-contrast {
+	background-color: transparent;
+}
+
+// Brand: muted text and borders derive from the section's text color.
+.is-style-section-brand {
+	// 88% / 78% keep muted and meta text at 4.5:1 on the brightest preset brand colors.
+	--wp--preset--color--main-accent: color-mix(in srgb, var(--wp--preset--color--base) 88%, transparent);
+	--wp--preset--color--secondary: color-mix(in srgb, var(--wp--preset--color--base) 78%, transparent);
+	--wp--preset--color--tertiary: color-mix(in srgb, var(--wp--preset--color--base) 10%, transparent);
+	--wp--preset--color--border-light: color-mix(in srgb, var(--wp--preset--color--base) 22%, transparent);
+	--wp--preset--color--border-dark: color-mix(in srgb, var(--wp--preset--color--base) 40%, transparent);
+	--wp--custom--semantic--marker: transparent;
+	--wp--custom--semantic--marker-text: var(--wp--custom--semantic--brand-button);
+	@include semantic-aliases;
+}
+
+// Accent: the accent color with dark ink in both color modes, so the light
+// palette applies inside. Tiles become a lighter wash of the accent, and marked
+// words take a light band because an accent band would not show.
+.is-style-section-accent {
+	@include palette-light;
+	--wp--preset--color--tertiary: color-mix(in srgb, var(--wp--preset--color--base) 55%, transparent);
+	--wp--preset--color--border-light: color-mix(in srgb, var(--wp--preset--color--main) 14%, transparent);
+	--wp--preset--color--border-dark: color-mix(in srgb, var(--wp--preset--color--main) 28%, transparent);
+	--wp--custom--semantic--marker: var(--wp--preset--color--base);
+	@include semantic-aliases;
+	color-scheme: light;
+}
+
+.is-style-section-brand .is-style-eyebrow {
+	color: inherit;
+}

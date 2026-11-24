@@ -1,0 +1,61 @@
+// The indent sits on the start side, so it follows the reading direction.
+// theme.json could only set a left padding. `:where()` keeps it as easy to
+// override as a Styles setting.
+:root :where(.wp-block-list) {
+	padding-inline-start: var(--wp--preset--spacing--medium);
+}
+
+// Lists in post content: room between items, and above a list nested in an
+// item.
+:is(.entry-content, .wp-block-post-content) :is(ul, ol) {
+	li {
+		margin-bottom: var(--wp--preset--spacing--small);
+	}
+
+	ul {
+		margin-top: var(--wp--preset--spacing--small);
+	}
+}
+
+// In post content, padding an item style adds (a post list's dividers) stops
+// at the list's edges: none above the first item, none below the last.
+.entry-content :is(ul, ol) > li {
+	&:first-child {
+		padding-top: 0;
+	}
+
+	&:last-child {
+		padding-bottom: 0;
+	}
+}
+
+// Check and Cross: a mark in place of the bullet, inside the item's indent,
+// so a long item's lines start under its first word. Cross mutes its mark:
+// it lists what is missing, or the old way of doing things.
+ul:is(.is-style-list-check, .is-style-list-cross) {
+	&,
+	ul {
+		padding-inline-start: 0 !important;
+		list-style: none;
+	}
+
+	li {
+		position: relative;
+		padding-inline-start: calc(var(--wp--preset--spacing--medium) + 0.5rem);
+
+		&::before {
+			position: absolute;
+			top: 0.1em;
+			inset-inline-start: 0;
+		}
+	}
+}
+
+ul.is-style-list-check li::before {
+	content: "\2713";
+}
+
+ul.is-style-list-cross li::before {
+	content: "\2715";
+	color: var(--wp--custom--semantic--text-tertiary);
+}

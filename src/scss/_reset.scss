@@ -1,0 +1,52 @@
+// Base rules every page starts from, before the theme's components.
+
+// Padding and borders count inside an element's width. Set once on the root
+// and inherited, so a component that switches back takes its children along.
+html {
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	-webkit-text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+// Lists start flush with the text; the List block adds its own indent
+// (blocks/_core-list.scss).
+ol,
+ul {
+	padding: 0;
+}
+
+// Captions under an image, a video, or a table: small, muted, and centered.
+div[class*="wp-block-"] figcaption {
+	margin-block: 1rem 0;
+	color: var(--wp--custom--semantic--text-tertiary);
+	font-size: var(--wp--preset--font-size--x-small);
+	text-align: center;
+}
+
+// Media never runs wider than the column it sits in.
+img,
+figure {
+	max-width: 100%;
+	height: auto;
+}
+
+// Headings split into even lines, so a last word never sits alone.
+:where(h1, h2, h3) {
+	text-wrap: balance;
+}
+
+// Code inside text, outside a Code block: a small tinted chip.
+*:not(.wp-block-code) > code {
+	padding: 0.1875rem 0.5rem;
+	border-radius: var(--wp--custom--radius--sm);
+	background-color: var(--wp--custom--semantic--surface-1);
+	font-weight: var(--wp--custom--font-weight--medium);
+}

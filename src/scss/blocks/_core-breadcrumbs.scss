@@ -1,0 +1,25 @@
+// Breadcrumbs: small, quiet, the current page in full strength.
+.wp-block-breadcrumbs {
+	color: var(--wp--custom--semantic--text-secondary);
+	font-size: var(--wp--preset--font-size--small);
+
+	li:not(:last-child)::after {
+		margin: 0 0.6em;
+		color: var(--wp--custom--semantic--text-tertiary);
+		opacity: 1;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+
+		&:hover {
+			color: var(--wp--custom--semantic--text-primary);
+			text-decoration: underline;
+		}
+	}
+
+	[aria-current="page"] {
+		color: var(--wp--custom--semantic--text-primary);
+	}
+}

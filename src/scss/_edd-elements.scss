@@ -1,0 +1,740 @@
+@use 'mixins';
+
+// ==========================================================================
+// EDD elements — theme buttons, borders, and form fields
+// ==========================================================================
+// inc/edd.php removes EDD's default color class and adds `.wp-element-button`
+// to purchase and checkout buttons, so theme.json button colors, section
+// styles, and dark mode apply. These rules replace EDD's own button base
+// (border, 4px radius, 14px font, 6/12 padding) with the shared button tokens.
+// `:is()` takes the specificity of `#edd-purchase-button` so EDD's ID rule
+// cannot win, without !important.
+
+// No `display` here: EDD hides its no-JS fallback button with a display rule.
+body :is(.edd-submit, #edd-purchase-button, #edd-reviews-review-form-submit, #edd-reviews-reply-form-submit, #edd_sl_license_add_site_form [type="submit"]) {
+	padding: var(--wp--custom--button--padding-block) var(--wp--custom--button--padding-inline);
+	border: 0;
+	border-radius: var(--wp--custom--button--radius);
+	box-shadow: none;
+	font-family: inherit;
+	font-size: var(--wp--custom--button--font-size);
+	font-weight: var(--wp--custom--button--font-weight);
+	line-height: var(--wp--custom--button--line-height);
+	text-decoration: none;
+	white-space: normal;
+	transition: box-shadow var(--wp--custom--transition);
+
+	// This rule's ID specificity also beats the shared hover wash; restate it.
+	@include mixins.button-states;
+}
+
+// Product cards in 3- and 4-column grids are narrow: the button sits beside
+// the price, a size down from the theme button so both fit on one line.
+body :is(.edd-blocks__download-footer, .digimia-product-card .wp-block-edd-buy-button) :is(.edd-submit, .edd_go_to_checkout, #edd-purchase-button) {
+	padding-inline: var(--wp--preset--spacing--medium);
+	font-size: var(--wp--preset--font-size--base);
+}
+
+// EDD buttons rendered without a filter (login, register, profile, discount,
+// the EDD Reviews and Software Licensing forms) cannot carry
+// `.wp-element-button`, so they take the theme button colors here. Back and
+// cancel links styled as buttons are outline buttons (_account.scss).
+body :is(.edd-submit, #edd-purchase-button, #edd-reviews-review-form-submit, #edd-reviews-reply-form-submit, #edd_sl_license_add_site_form [type="submit"]):not(.wp-element-button, .edd-blocks-subscriptions__subscription-actions > *, .edd-manage-license-back) {
+	background-color: var(--wp--preset--color--primary);
+	color: var(--wp--preset--color--base);
+}
+
+// EDD blocks draw their borders with this variable (#eee by default). Point it
+// at the semantic border so EDD borders follow light, dark, and Contrast.
+body {
+	--edd-blocks-light-grey: var(--wp--custom--semantic--border);
+}
+
+// EDD block forms (login, register, profile) set 4px / 6px field padding.
+// Restore the theme field size from _forms.scss. Checkout is handled with the
+// checkout screen styles.
+body :is(.edd-blocks-form) :is(input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select) {
+	padding: 10px 12px;
+}
+
+// EDD hardcodes a WordPress admin grey (#646970) for the password hint, which
+// is unreadable in dark mode.
+body .edd-blocks-form .indicator-hint {
+	color: var(--wp--custom--semantic--text-tertiary);
+}
+
+// EDD hides the focus outline on its show-password button (a transparent
+// outline on `:focus`), so keyboard users lost their place there.
+body :is(.wp-block-edd-register, .wp-block-edd-login, .wp-block-edd-profile-editor) .wp-hide-pw:focus-visible {
+	outline: 2px solid var(--wp--custom--semantic--focus-ring);
+	outline-offset: 2px;
+}
+
+// EDD colors required fields black (`.edd_form input.edd-input.required`), so
+// typed text vanished on the dark field background (checkout, dark mode).
+body .edd_form :is(input.edd-input, select.edd-select).required {
+	color: var(--wp--custom--semantic--input-text);
+}
+
+// Add-to-cart feedback. EDD's "Added to cart" note stays for screen readers
+// (its wrapper is aria-live) but no longer covers the button for 3 seconds:
+// the next step shows at once. src/js/edd-cart-feedback.js adds
+// `.digimia-just-added` to the clicked button's wrapper for a moment.
+.edd_purchase_submit_wrapper .edd-cart-ajax-alert {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+// The Checkout link carries a check: the product is in the cart (also after
+// a reload). Right after an add the check pops in and the button rings once.
+// In EDD's multi-option mode the Add button stays, so it gets the check briefly.
+.edd_purchase_submit_wrapper .edd_go_to_checkout,
+.edd_purchase_submit_wrapper.digimia-just-added .edd-add-to-cart.edd-has-js {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
+
+	// 1.4em reads at the size of the label; the negative block margin keeps
+	// the button's height (as with the button icons in _core-button.scss).
+	&::before {
+		flex-shrink: 0;
+		width: 1.4em;
+		height: 1.4em;
+		margin-block: -0.2em;
+		background-color: currentColor;
+		content: "";
+		-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M173.66 98.34a8 8 0 0 1 0 11.32l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 0M232 128A104 104 0 1 1 128 24a104.11 104.11 0 0 1 104 104m-16 0a88 88 0 1 0-88 88 88.1 88.1 0 0 0 88-88'/%3E%3C/svg%3E") center / contain no-repeat;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M173.66 98.34a8 8 0 0 1 0 11.32l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 0M232 128A104 104 0 1 1 128 24a104.11 104.11 0 0 1 104 104m-16 0a88 88 0 1 0-88 88 88.1 88.1 0 0 0 88-88'/%3E%3C/svg%3E") center / contain no-repeat;
+	}
+}
+
+.edd_purchase_submit_wrapper.digimia-just-added {
+	:is(.edd_go_to_checkout, .edd-add-to-cart.edd-has-js) {
+		animation: digimia-added-ring 1.2s ease-out;
+
+		&::before {
+			animation: digimia-added-check 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+		}
+	}
+}
+
+// Header cart count: one bump when an item is added.
+.edd-blocks-cart__mini-quantity.digimia-bump {
+	animation: digimia-bump 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes digimia-added-check {
+	from {
+		transform: scale(0);
+		opacity: 0;
+	}
+}
+
+@keyframes digimia-added-ring {
+	from {
+		box-shadow: 0 0 0 0 color-mix(in srgb, var(--wp--preset--color--primary) 32%, transparent);
+	}
+
+	30% {
+		box-shadow: 0 0 0 6px color-mix(in srgb, var(--wp--preset--color--primary) 32%, transparent);
+	}
+
+	to {
+		box-shadow: 0 0 0 10px transparent;
+	}
+}
+
+@keyframes digimia-bump {
+	40% {
+		transform: scale(1.35);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.edd_purchase_submit_wrapper.digimia-just-added :is(.edd_go_to_checkout, .edd-add-to-cart.edd-has-js),
+	.edd_purchase_submit_wrapper.digimia-just-added :is(.edd_go_to_checkout, .edd-add-to-cart.edd-has-js)::before,
+	.edd-blocks-cart__mini-quantity.digimia-bump {
+		animation: none;
+	}
+}
+
+// EDD downloads pagination (rendered after the grid, outside the block):
+// a centered row of round page buttons in the theme tokens.
+.edd_pagination {
+	@include mixins.pagination-row;
+	margin-top: var(--wp--preset--spacing--x-large);
+
+	.page-numbers {
+		@include mixins.pagination-item;
+	}
+
+	a.page-numbers:hover {
+		@include mixins.pagination-hover;
+	}
+
+	.page-numbers.current {
+		@include mixins.pagination-current;
+	}
+
+	.page-numbers.dots {
+		border-color: transparent;
+	}
+}
+
+// EDD store surfaces (forms, order cards, download list, receipt and
+// confirmation panels, cart) become theme panels wherever EDD renders them.
+:is(.edd-blocks-form, .edd-blocks-orders__order, div.edd-blocks__user-downloads, .edd-blocks-receipt__items, .edd-blocks-receipt__totals) {
+	@include mixins.panel;
+}
+
+// Where EDD frames an inner element instead of the form (the checkout cart,
+// profile fieldsets), that element is the panel. Kept separate: the ID would
+// give the list above ID specificity and re-frame the forms below.
+.edd-blocks-form__cart #edd_checkout_cart,
+.wp-block-edd-profile-editor .edd-blocks-form fieldset {
+	@include mixins.panel;
+}
+
+// Forms whose frame moved to an inner element stay unframed.
+:is(.wp-block-edd-checkout, .wp-block-edd-profile-editor) .edd-blocks-form {
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+// Legends sit inside their panel instead of on the border.
+.edd-blocks-form fieldset > legend {
+	float: inline-start;
+	width: 100%;
+	padding: 0;
+}
+
+// Inside a pattern card (sign in, register) the card is the panel.
+.digimia-form-card .edd-blocks-form {
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+// Rows: hairline dividers, muted labels, strong values.
+:is(.edd-blocks-receipt__row-item, .edd-order-item__product, .edd-order-items__header) {
+	padding-block: 0.85rem;
+}
+
+:is(.edd-blocks-receipt__row-header, .edd-blocks-orders__order-header, .edd-order-items__header) {
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--base);
+	font-weight: 600;
+}
+
+.edd-blocks__row-label {
+	color: var(--wp--custom--semantic--text-secondary);
+}
+
+.edd-blocks-receipt__row-item .edd-blocks__row-value {
+	color: var(--wp--custom--semantic--text-primary);
+	font-weight: 600;
+}
+
+// Purchased files, receipts, and orders (confirmation, receipt, Account).
+// ---------------------------------------------------------------------------
+
+// Product names are content, not labels: full-strength and semibold.
+:is(.edd-blocks-receipt__item, .edd-order-item__product) .edd-blocks__row-label {
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--base);
+	font-weight: 600;
+}
+
+// Receipt items: name and files on the left, price top-right.
+.edd-blocks-receipt__item {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--wp--preset--spacing--medium);
+
+	.edd-blocks-receipt__item-price {
+		flex-shrink: 0;
+		color: var(--wp--custom--semantic--text-primary);
+		font-weight: 600;
+	}
+}
+
+.edd-blocks-receipt__items .edd-blocks-receipt__item:first-child {
+	padding-top: 0;
+}
+
+.edd-blocks-receipt__items .edd-blocks-receipt__item:last-child {
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+// Files as a row of download chips instead of a bulleted list.
+ul.edd_purchase_receipt_files {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 0.6rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.edd-order-item__files {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: 0.5rem;
+}
+
+// One download chip for every purchased file (receipt, confirmation, Account):
+// an outline pill with the download icon, filling with the brand tint on hover.
+:is(.edd_download_file_link, .edd-order-item__file-link) {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
+	padding-block: 0.45rem;
+	padding-inline: 0.75rem 0.9rem;
+	border: 1px solid var(--wp--custom--semantic--border-hover);
+	border-radius: var(--wp--custom--radius--full);
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+	line-height: var(--wp--custom--line-height--snug);
+	text-align: start;
+	text-decoration: none;
+	transition: border-color var(--wp--custom--transition), background-color var(--wp--custom--transition), color var(--wp--custom--transition);
+
+	&::before {
+		flex-shrink: 0;
+		width: 1.1em;
+		height: 1.1em;
+		background-color: currentColor;
+		content: "";
+		-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M224 144v64a8 8 0 0 1-8 8H40a8 8 0 0 1-8-8v-64a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0m-101.66 5.66a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 124.69V32a8 8 0 0 0-16 0v92.69L93.66 98.34a8 8 0 0 0-11.32 11.32Z'/%3E%3C/svg%3E") center / contain no-repeat;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M224 144v64a8 8 0 0 1-8 8H40a8 8 0 0 1-8-8v-64a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0m-101.66 5.66a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 124.69V32a8 8 0 0 0-16 0v92.69L93.66 98.34a8 8 0 0 0-11.32 11.32Z'/%3E%3C/svg%3E") center / contain no-repeat;
+	}
+
+	&:hover {
+		border-color: var(--wp--preset--color--primary);
+		background: var(--wp--custom--semantic--brand-muted);
+		color: var(--wp--preset--color--primary);
+	}
+}
+
+// On phones EDD's two columns stack: the column headers would read as two
+// stray lines, and the files follow their product on the left.
+@media (max-width: 479px) {
+	.edd-blocks__user-downloads .edd-order-items__header {
+		display: none;
+	}
+
+	.edd-order-item__files {
+		justify-content: flex-start;
+	}
+}
+
+// Column headers ("Product", "Files") as a quiet eyebrow, as in the checkout summary.
+.edd-order-items__header .edd-blocks__row-label {
+	color: var(--wp--custom--semantic--text-tertiary);
+	font-size: var(--wp--preset--font-size--x-small);
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+// Order and subscription status as a chip in the status colors
+// (inc/edd-account.php adds the subscription status class).
+:is(.edd-blocks-orders__order-status, .edd-blocks__row-value.edd_receipt_payment_status, .edd-blocks-subscriptions__subscription-status) {
+	--digimia-status: var(--wp--custom--semantic--text-tertiary);
+	display: inline-flex;
+	justify-self: end;
+	width: fit-content;
+	margin-inline-start: auto;
+	padding: 0.15rem 0.6rem;
+	border-radius: var(--wp--custom--radius--full);
+	background: color-mix(in srgb, var(--digimia-status) 14%, var(--wp--custom--semantic--surface-0));
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--x-small);
+	font-weight: 600;
+
+	&:is(.complete, .is-active, .is-trialling, .is-completed) {
+		--digimia-status: var(--wp--custom--semantic--success);
+	}
+
+	&:is(.pending, .processing, .partially_refunded, .is-pending, .is-failing) {
+		--digimia-status: var(--wp--custom--semantic--warning);
+	}
+
+	&:is(.failed, .revoked, .refunded, .abandoned, .is-expired) {
+		--digimia-status: var(--wp--custom--semantic--error);
+	}
+}
+
+// Order cards: the amount stands out, the links sit on one quiet row.
+.edd-blocks-orders__order-data {
+	color: var(--wp--custom--semantic--text-secondary);
+	font-size: var(--wp--preset--font-size--small);
+
+	.edd-blocks-orders__order-amount {
+		color: var(--wp--custom--semantic--text-primary);
+		font-weight: 600;
+	}
+}
+
+.edd-blocks-orders__order-details {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem 1rem;
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+}
+
+// "Products" on the confirmation and receipt (an h2 via inc/edd.php).
+:is(.edd-blocks__confirmation, .edd-blocks__receipt) > h2 {
+	margin-block: var(--wp--preset--spacing--large) var(--wp--preset--spacing--small);
+	font-size: var(--wp--preset--font-size--lead);
+}
+
+.edd-blocks__confirmation-details {
+	margin-top: var(--wp--preset--spacing--medium);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+}
+
+// Confirmation page header (template-page-confirmation): a success mark above the title.
+.digimia-confirmation-header::before {
+	display: block;
+	width: 3.5rem;
+	height: 3.5rem;
+	margin-bottom: var(--wp--preset--spacing--medium);
+	border-radius: var(--wp--custom--radius--full);
+	background: color-mix(in srgb, var(--wp--custom--semantic--success) 16%, var(--wp--custom--semantic--surface-0)) center / 1.75rem no-repeat;
+	content: "";
+}
+
+.digimia-confirmation-header::after {
+	position: absolute;
+	top: 0.875rem;
+	inset-inline-start: 0.875rem;
+	width: 1.75rem;
+	height: 1.75rem;
+	background-color: var(--wp--custom--semantic--success);
+	content: "";
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M173.66 98.34a8 8 0 0 1 0 11.32l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 0M232 128A104 104 0 1 1 128 24a104.11 104.11 0 0 1 104 104m-16 0a88 88 0 1 0-88 88 88.1 88.1 0 0 0 88-88'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M173.66 98.34a8 8 0 0 1 0 11.32l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 0M232 128A104 104 0 1 1 128 24a104.11 104.11 0 0 1 104 104m-16 0a88 88 0 1 0-88 88 88.1 88.1 0 0 0 88-88'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.digimia-confirmation-header {
+	position: relative;
+}
+
+// EDD's default page text ("Thank you for your purchase!") as the intro line.
+.digimia-confirmation-content > p:first-child {
+	margin-top: 0;
+	color: var(--wp--custom--semantic--text-secondary);
+	font-size: var(--wp--preset--font-size--lead);
+}
+
+// Profile editor: short fields in pairs from 600px (as the checkout names).
+// store-account uses default (block) layout for its sections on purpose: as
+// flex items, EDD's auto-fit grid rows are measured before their width is
+// known and the Downloads panel grew by a row of empty space.
+@media (min-width: 600px) {
+	.wp-block-edd-profile-editor :is(#edd_profile_personal_fieldset, #edd_profile_address_fieldset) {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.25rem var(--wp--preset--spacing--medium);
+
+		// The legend is floated (see below), which makes it a grid item: span the row.
+		> :is(legend, .edd-blocks-form__group) {
+			grid-column: 1 / -1;
+			margin: 0;
+		}
+
+		> :is(.edd-blocks-form__group-first-name, .edd-blocks-form__group-last-name, .edd-blocks-form__group-display-name, .edd-blocks-form__group-email, .edd-blocks-form__group-address-city, .edd-blocks-form__group-address-zip) {
+			grid-column: auto;
+		}
+	}
+}
+
+// Legends and labels in EDD forms.
+.edd-blocks-form legend {
+	margin-bottom: var(--wp--preset--spacing--small);
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--lead);
+	font-weight: 600;
+}
+
+.edd-blocks-form .edd-blocks-form__group > label {
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+}
+
+// EDD secondary buttons ("Generate Password", "Hide") as small outline pills.
+.edd-button-secondary {
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--wp--custom--semantic--border-hover);
+	border-radius: var(--wp--custom--radius--full);
+	background: transparent;
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+	cursor: pointer;
+
+	&:hover {
+		border-color: var(--wp--custom--semantic--text-primary);
+	}
+}
+
+// Password strength meter: a quiet tinted row with a level bar on the left,
+// instead of EDD's fixed pastel boxes (unreadable in dark mode). Weak and medium
+// use the error and warning status colors; strong is brand.
+// `.edd-has-js` (always present) lifts this over EDD's state rules such as
+// `.wp-block-edd-register #pass-strength-result.strong`.
+body .edd-blocks-form #pass-strength-result.edd-has-js {
+	--digimia-meter: var(--wp--custom--semantic--border-hover);
+	margin-top: 0.5rem;
+	padding: 0.35rem 0.75rem;
+	border: 0;
+	border-inline-start: 3px solid var(--digimia-meter);
+	border-radius: var(--wp--custom--radius--sm);
+	background: color-mix(in srgb, var(--digimia-meter) 12%, var(--wp--custom--semantic--surface-0));
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+	text-align: start;
+
+	&:is(.short, .bad) {
+		--digimia-meter: var(--wp--custom--semantic--error);
+	}
+
+	&.good {
+		--digimia-meter: var(--wp--custom--semantic--warning);
+	}
+
+	&.strong {
+		--digimia-meter: var(--wp--preset--color--primary);
+	}
+}
+
+// Checkbox rows (Remember me, Confirm weak password): box and label on one line.
+.edd-blocks-form :is(.edd-blocks-form__group-remember, .edd-blocks-form__group-pw-weak) .edd-blocks-form__control {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+
+	label {
+		margin: 0;
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 400;
+	}
+}
+
+// Sign-in, registration, and password forms: one full-width primary action.
+.edd-blocks-form:is(.edd-blocks-form__login, .edd-blocks-form__register, .edd-blocks-form__lost-password) .edd-blocks-form__group-submit {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0.75rem;
+
+	.edd-submit {
+		width: 100%;
+	}
+
+	// "Generate Password" stays a small secondary pill above the submit button.
+	.edd-button-secondary {
+		align-self: flex-start;
+	}
+}
+
+// EDD's lost and reset password instructions, as a quiet hint above the form.
+.wp-block-edd-login > p.message {
+	margin: 0 0 var(--wp--preset--spacing--medium);
+	color: var(--wp--custom--semantic--text-secondary);
+	font-size: var(--wp--preset--font-size--small);
+}
+
+// "Lost password?" is a quiet text link under the button, not a second action.
+.edd-blocks-form__group-lost-password {
+	margin: 0;
+	text-align: center;
+	font-size: var(--wp--preset--font-size--small);
+
+	a {
+		color: var(--wp--custom--semantic--text-secondary);
+
+		&:hover {
+			color: var(--wp--custom--semantic--text-primary);
+		}
+	}
+}
+
+// EDD alerts: a tint of the status color with a status icon. Text stays
+// `text-primary`, so it reads in every palette and mode; the color is carried
+// by the tint, the border, and the icon (Phosphor icons from assets/icons/,
+// inlined as masks).
+.edd-alert {
+	--digimia-status: var(--wp--custom--semantic--info);
+	--digimia-status-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88 88.1 88.1 0 0 1-88 88m16-40a8 8 0 0 1-8 8 16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16 16 16 0 0 1 16 16v40a8 8 0 0 1 8 8m-32-92a12 12 0 1 1 12 12 12 12 0 0 1-12-12'/%3E%3C/svg%3E");
+	display: flex;
+	gap: 0.75rem;
+	align-items: flex-start;
+	margin-bottom: var(--wp--preset--spacing--medium);
+	padding: 0.9rem var(--wp--preset--spacing--medium);
+	border: 1px solid color-mix(in srgb, var(--digimia-status) 40%, var(--wp--custom--semantic--surface-0));
+	border-radius: var(--wp--custom--radius--lg);
+	background: color-mix(in srgb, var(--digimia-status) 10%, var(--wp--custom--semantic--surface-0));
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--small);
+
+	&::before {
+		display: block;
+		flex-shrink: 0;
+		width: 1.25rem;
+		height: 1.25rem;
+		margin-top: 0.05rem;
+		background-color: var(--digimia-status);
+		content: "";
+		-webkit-mask: var(--digimia-status-icon) center / contain no-repeat;
+		mask: var(--digimia-status-icon) center / contain no-repeat;
+	}
+
+	// EDD wraps each message in a paragraph; stack them beside the icon.
+	> :is(p, div) {
+		flex: 1;
+		margin: 0;
+	}
+
+	p + p {
+		margin-top: 0.35rem;
+	}
+
+	a {
+		color: inherit;
+		font-weight: 600;
+	}
+}
+
+.edd-alert-error {
+	--digimia-status: var(--wp--custom--semantic--error);
+	--digimia-status-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88 88.1 88.1 0 0 1-88 88m-8-80V80a8 8 0 0 1 16 0v56a8 8 0 0 1-16 0m20 36a12 12 0 1 1-12-12 12 12 0 0 1 12 12'/%3E%3C/svg%3E");
+}
+
+.edd-alert-success {
+	--digimia-status: var(--wp--custom--semantic--success);
+	--digimia-status-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M173.66 98.34a8 8 0 0 1 0 11.32l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 0M232 128A104 104 0 1 1 128 24a104.11 104.11 0 0 1 104 104m-16 0a88 88 0 1 0-88 88 88.1 88.1 0 0 0 88-88'/%3E%3C/svg%3E");
+}
+
+.edd-alert-warn {
+	--digimia-status: var(--wp--custom--semantic--warning);
+	--digimia-status-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 256 256'%3E%3Cpath d='M236.8 188.09 149.35 36.22a24.76 24.76 0 0 0-42.7 0L19.2 188.09a23.51 23.51 0 0 0 0 23.72A24.35 24.35 0 0 0 40.55 224h174.9a24.35 24.35 0 0 0 21.33-12.19 23.51 23.51 0 0 0 .02-23.72m-13.87 15.71a8.5 8.5 0 0 1-7.48 4.2H40.55a8.5 8.5 0 0 1-7.48-4.2 7.59 7.59 0 0 1 0-7.72l87.45-151.87a8.75 8.75 0 0 1 15 0l87.45 151.87a7.59 7.59 0 0 1-.04 7.72M120 144v-40a8 8 0 0 1 16 0v40a8 8 0 0 1-16 0m20 36a12 12 0 1 1-12-12 12 12 0 0 1 12 12'/%3E%3C/svg%3E");
+}
+
+// Required-field asterisks in the error color, which lightens in dark mode
+// (EDD's fixed reds fall below 4.5:1 there). `:is()` takes the checkout ID's
+// specificity to outrank EDD's `#edd_checkout_form_wrap span.edd-required-indicator`.
+body :is(#edd_checkout_form_wrap, .edd-blocks-form, .edd-required-fields-notice) .edd-required-indicator {
+	color: var(--wp--custom--semantic--error);
+}
+
+// EDD Cart Preview drawer (Downloads → Settings → Payments → Cart). It renders
+// in Shadow DOM, so the theme reaches it two ways: EDD's CSS variables, set on
+// the host element (page styles outrank the drawer's own `:host` defaults and
+// follow the palette, Contrast sections aside, and dark mode), and the
+// `::part()` names EDD exposes for the pieces the variables do not cover.
+edd-cart-preview {
+	--edd-cart-preview-font-family: var(--wp--preset--font-family--primary);
+	--edd-cart-preview-font-size-base: 1rem;
+	--edd-cart-preview-font-size-small: var(--wp--preset--font-size--small);
+	--edd-cart-preview-font-size-medium: 0.9375rem;
+	--edd-cart-preview-font-size-large: var(--wp--preset--font-size--lead);
+	--edd-cart-preview-font-size-xlarge: var(--wp--preset--font-size--medium);
+	--edd-cart-preview-line-height: var(--wp--custom--line-height--body);
+	--edd-cart-preview-color-text: var(--wp--custom--semantic--text-primary);
+	--edd-cart-preview-color-text-muted: var(--wp--custom--semantic--text-secondary);
+	--edd-cart-preview-color-danger: var(--wp--custom--semantic--error);
+	--edd-cart-preview-color-danger-light: color-mix(in srgb, var(--wp--custom--semantic--error) 10%, transparent);
+	--edd-cart-preview-color-danger-lighter: color-mix(in srgb, var(--wp--custom--semantic--error) 30%, transparent);
+	--edd-cart-preview-color-border: var(--wp--custom--semantic--border);
+	--edd-cart-preview-color-background: var(--wp--custom--semantic--surface-0);
+	--edd-cart-preview-color-background-dimmed: color-mix(in srgb, var(--wp--custom--semantic--surface-0) 50%, transparent);
+	// The light palette's text color stays dark in dark mode, so the backdrop always dims.
+	--edd-cart-preview-color-backdrop: color-mix(in srgb, var(--wp--custom--color--light--main) 55%, transparent);
+	--edd-cart-preview-color-message: var(--wp--custom--semantic--info);
+	--edd-cart-preview-color-message-light: color-mix(in srgb, var(--wp--custom--semantic--info) 10%, transparent);
+	--edd-cart-preview-color-primary: var(--wp--preset--color--primary);
+	--edd-cart-preview-color-primary-hover: var(--wp--preset--color--primary-accent);
+	--edd-cart-preview-color-primary-text: var(--wp--preset--color--base);
+	--edd-cart-preview-color-link: var(--wp--custom--semantic--text-primary);
+	--edd-cart-preview-color-link-hover: var(--wp--custom--semantic--brand-hover);
+	--edd-cart-preview-border-radius: var(--wp--custom--radius--base);
+	--edd-cart-preview-dialog-width: 26rem;
+	--edd-cart-preview-spacing-sm: 0.75rem;
+	--edd-cart-preview-spacing-md: 1rem;
+	--edd-cart-preview-spacing-lg: 1.5rem;
+	--edd-cart-preview-spacing-xl: 3rem;
+	--edd-cart-preview-shadow-dialog: var(--wp--preset--shadow--x-large);
+	--edd-cart-preview-shadow-button: var(--wp--preset--shadow--medium);
+}
+
+edd-cart-preview::part(title) {
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--lead);
+	font-weight: 600;
+}
+
+edd-cart-preview::part(close-button) {
+	border-radius: var(--wp--custom--radius--full);
+	color: var(--wp--custom--semantic--text-secondary);
+}
+
+// Items as rows with dividers, like the checkout summary.
+edd-cart-preview::part(item) {
+	padding-inline: 0;
+	border-width: 0 0 1px;
+	border-radius: 0;
+}
+
+edd-cart-preview::part(item-image) {
+	border-radius: var(--wp--custom--radius--sm);
+}
+
+edd-cart-preview::part(item-name) {
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+	line-height: var(--wp--custom--line-height--snug);
+}
+
+edd-cart-preview::part(summary-value) {
+	font-family: var(--wp--preset--font-family--heading);
+	font-size: var(--wp--preset--font-size--lead);
+	font-weight: 600;
+}
+
+// Footer buttons in the theme's pill shape; Continue shopping as an outline.
+edd-cart-preview::part(button) {
+	min-height: 3rem;
+	border-radius: var(--wp--custom--button--radius);
+	font-weight: var(--wp--custom--button--font-weight);
+}
+
+edd-cart-preview::part(continue-button) {
+	border: 0;
+	background: transparent;
+	box-shadow: inset 0 0 0 2px currentColor;
+	color: var(--wp--custom--semantic--text-primary);
+}
+
+// EDD's optional floating cart button, as a theme surface.
+edd-cart-preview::part(cart-preview-button-trigger) {
+	border: 1px solid var(--wp--custom--semantic--border);
+	background: var(--wp--custom--semantic--surface-0);
+	color: var(--wp--custom--semantic--text-primary);
+}

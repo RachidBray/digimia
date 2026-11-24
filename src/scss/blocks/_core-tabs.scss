@@ -1,0 +1,62 @@
+@use '../mixins';
+
+/* Tabs
+--------------------------------------------- */
+
+// Digimia tabs (`digimia-tabs`, product tour and pricing patterns): a pill
+// switch centered above the panels. The selected tab is a raised chip; the
+// others take the button hover wash.
+.wp-block-tabs.digimia-tabs {
+	display: flex;
+	flex-direction: column;
+	gap: var(--wp--preset--spacing--x-large);
+}
+
+.wp-block-tabs.digimia-tabs > * {
+	margin-block: 0;
+}
+
+.digimia-tabs > .wp-block-tab-list {
+	align-self: center;
+	flex-wrap: nowrap;
+	gap: 0.25rem;
+	max-width: 100%;
+	padding: 0.25rem;
+	overflow-x: auto;
+	scrollbar-width: none;
+	border: 1px solid var(--wp--custom--semantic--border);
+	border-radius: var(--wp--custom--radius--full);
+	background: var(--wp--custom--semantic--surface-1);
+}
+
+// Start-aligned switch, for tabs under a left-aligned heading (product catalog).
+.digimia-tabs--start > .wp-block-tab-list {
+	align-self: flex-start;
+}
+
+.digimia-tabs > .wp-block-tab-list button {
+	flex-shrink: 0;
+	padding: 0.625rem 1.25rem;
+	border-radius: var(--wp--custom--radius--full);
+	color: var(--wp--custom--semantic--text-secondary);
+	font-weight: 600;
+	white-space: nowrap;
+	transition: background-color var(--wp--custom--transition), color var(--wp--custom--transition);
+
+	@include mixins.button-states;
+
+	&::before {
+		display: none;
+	}
+
+	&[aria-selected="true"] {
+		background: var(--wp--custom--semantic--surface-0);
+		color: var(--wp--custom--semantic--text-primary);
+		box-shadow: var(--wp--preset--shadow--small);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--wp--custom--semantic--focus-ring);
+		outline-offset: 2px;
+	}
+}

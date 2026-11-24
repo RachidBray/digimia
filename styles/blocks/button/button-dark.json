@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Dark",
+	"slug": "button-dark",
+	"blockTypes": [
+		"core/button"
+	],
+	"styles": {
+		"color": {
+			"background": "var:custom|semantic|text-primary",
+			"text": "var:custom|semantic|surface-0"
+		}
+	}
+}

@@ -1,0 +1,32 @@
+// A floated image keeps the text wrapping around it off its bottom edge.
+.wp-block-image:is(.alignleft, .alignright) {
+	margin-bottom: var(--wp--preset--spacing--small);
+}
+
+// On phones a floated image stands on its own line, centered: the text
+// beside it would only be a few words wide.
+@media only screen and (max-width: 600px) {
+	.is-layout-flow .wp-block-image:is(.alignleft, .alignright) {
+		float: none;
+		margin-inline: auto;
+	}
+}
+
+// In a row, an image keeps its width, and the text beside it wraps instead.
+html .is-layout-flex .wp-block-image {
+	flex-shrink: 0;
+}
+
+// WordPress's Rounded style makes a circle; here it rounds the corners, and
+// Rounded Full makes the circle.
+.wp-block-image {
+	&.is-style-rounded img,
+	.is-style-rounded img {
+		border-radius: var(--wp--custom--radius--lg);
+	}
+
+	&.is-style-rounded-full img,
+	.is-style-rounded-full img {
+		border-radius: var(--wp--custom--radius--full);
+	}
+}

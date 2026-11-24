@@ -1,0 +1,65 @@
+/* Details - Accordion (rows between lines) and Card (one white card per
+   question, made for Soft sections) styles, for FAQ patterns
+--------------------------------------------- */
+
+.wp-block-details.is-style-card {
+	padding-inline: var(--wp--preset--spacing--large);
+	border: 1px solid var(--wp--custom--semantic--border);
+	border-radius: var(--wp--custom--radius--lg);
+	background: var(--wp--custom--semantic--surface-0);
+}
+
+.wp-block-details.is-style-card + .wp-block-details.is-style-card {
+	margin-top: var(--wp--preset--spacing--small);
+}
+
+.wp-block-details:is(.is-style-accordion, .is-style-card) {
+	margin: 0;
+
+	&.is-style-accordion {
+		border-bottom: 1px solid var(--wp--custom--semantic--border);
+	}
+
+	&.is-style-accordion:not(.is-style-accordion + .is-style-accordion) {
+		border-top: 1px solid var(--wp--custom--semantic--border);
+	}
+
+	summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--wp--preset--spacing--medium);
+		padding-block: var(--wp--preset--spacing--medium);
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--lead);
+		font-weight: 600;
+		list-style: none;
+		cursor: pointer;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		// Plus that turns into a minus when the answer is open.
+		&::after {
+			flex-shrink: 0;
+			width: 1em;
+			color: var(--wp--preset--color--primary);
+			font-size: 1.5em;
+			font-weight: 400;
+			line-height: 1;
+			text-align: center;
+			content: "+";
+		}
+	}
+
+	&[open] summary::after {
+		content: "\2212";
+	}
+
+	> :not(summary) {
+		max-width: 46rem;
+		margin-block: 0 var(--wp--preset--spacing--medium);
+		color: var(--wp--custom--semantic--text-secondary);
+	}
+}

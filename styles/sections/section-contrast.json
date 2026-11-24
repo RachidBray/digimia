@@ -1,0 +1,29 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Contrast",
+	"slug": "section-contrast",
+	"blockTypes": [
+		"core/group",
+		"core/columns",
+		"core/column"
+	],
+	"styles": {
+		"color": {
+			"background": "var:preset|color|base",
+			"text": "var:preset|color|main"
+		},
+		"elements": {
+			"heading": {
+				"color": {
+					"text": "var:preset|color|main"
+				}
+			},
+			"link": {
+				"color": {
+					"text": "var:preset|color|main"
+				}
+			}
+		}
+	}
+}

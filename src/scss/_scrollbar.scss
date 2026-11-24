@@ -1,0 +1,27 @@
+/* ============================================================================
+   Scrollbar — theme.json Driven
+   ========================================================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--wp--preset--color--base);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--wp--custom--semantic--surface-3);
+    border-radius: var(--wp--custom--radius--full);
+
+    &:hover {
+        background: var(--wp--custom--semantic--text-tertiary);
+    }
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--wp--custom--semantic--surface-3) var(--wp--preset--color--base);
+}

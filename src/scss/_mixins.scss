@@ -1,0 +1,186 @@
+// ==========================================================================
+// Shared mixins
+// ==========================================================================
+
+// Product card: one definition for the Query Loop product card
+// (`.digimia-product-card`) and EDD's Downloads grid card, so both follow the
+// card tokens in docs/ai/design-system.md (padding large, radius lg, 1px border).
+@mixin product-card {
+	height: 100%;
+	padding: var(--wp--preset--spacing--large);
+	border: 1px solid var(--wp--custom--semantic--border);
+	border-radius: var(--wp--custom--radius--lg);
+	background: var(--wp--custom--semantic--surface-0);
+	transition: border-color var(--wp--custom--transition), box-shadow var(--wp--custom--transition);
+
+	&:hover {
+		border-color: var(--wp--custom--semantic--border-hover);
+		box-shadow: var(--wp--preset--shadow--small);
+	}
+}
+
+@mixin product-card-media {
+	display: block;
+	margin: 0;
+	overflow: hidden;
+	border-radius: var(--wp--custom--radius--base);
+	background: var(--wp--custom--semantic--surface-1);
+
+	img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		transition: transform var(--wp--custom--transition);
+	}
+
+	&:hover img {
+		transform: scale(1.03);
+	}
+}
+
+@mixin product-card-title {
+	margin: 0;
+	font-size: var(--wp--preset--font-size--medium);
+	font-weight: 600;
+	line-height: var(--wp--custom--line-height--snug);
+
+	a {
+		color: var(--wp--custom--semantic--text-primary);
+		text-decoration: none;
+		text-underline-offset: 0.2em;
+
+		&:hover {
+			text-decoration-line: underline;
+		}
+	}
+}
+
+// Purchase area pinned to the bottom of the card, above a hairline: the price
+// at the start, the buy button at the end.
+@mixin product-card-footer {
+	container: digimia-buy / inline-size;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--wp--preset--spacing--small);
+	width: 100%;
+	margin-top: auto;
+	padding-top: var(--wp--preset--spacing--medium);
+	border-top: 1px solid var(--wp--custom--semantic--border);
+
+	// The Buy Button's "Select a Download" box in the editor is wider than a card.
+	> * {
+		max-width: 100%;
+	}
+
+	// Too narrow for "From $199.00" beside "Choose options": every card of
+	// that width stacks the price over a full-width button, so the hairlines
+	// in a grid row stay level, not only those of products with options.
+	@container digimia-buy (max-width: 18rem) {
+		> * {
+			flex-basis: 100%;
+		}
+
+		:is(.edd_purchase_submit_wrapper, .edd-submit, .edd_go_to_checkout) {
+			width: 100%;
+		}
+	}
+}
+
+// The price beside the buy button: in the heading font, a step above the
+// excerpt, like the big price on the product page.
+@mixin product-card-price {
+	margin: 0;
+	color: var(--wp--custom--semantic--text-primary);
+	font-family: var(--wp--preset--font-family--heading, inherit);
+	font-size: var(--wp--preset--font-size--medium);
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: -0.01em;
+	font-variant-numeric: tabular-nums;
+
+	// "From" before the lowest price of a product with options, quieter than
+	// the amount (`digimia-price-amount`, from inc/edd-product.php and inc/edd.php).
+	&:has(.digimia-price-amount) {
+		color: var(--wp--custom--semantic--text-secondary);
+		font-family: inherit;
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 400;
+		letter-spacing: normal;
+	}
+
+	.digimia-price-amount {
+		color: var(--wp--custom--semantic--text-primary);
+		font-family: var(--wp--preset--font-family--heading, inherit);
+		font-size: var(--wp--preset--font-size--medium);
+		font-weight: 700;
+		letter-spacing: -0.01em;
+	}
+}
+
+// Store panel: the card surface without hover, for EDD forms, orders, receipts, and the cart.
+@mixin panel {
+	padding: var(--wp--preset--spacing--large);
+	border: 1px solid var(--wp--custom--semantic--border);
+	border-radius: var(--wp--custom--radius--lg);
+	background: var(--wp--custom--semantic--surface-0);
+}
+
+// Pagination: a centered row of round page buttons. Shared by EDD downloads
+// pagination and core Query pagination.
+@mixin pagination-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--wp--preset--spacing--small);
+}
+
+@mixin pagination-item {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 2.75rem;
+	height: 2.75rem;
+	margin: 0;
+	padding: 0 0.9rem;
+	border: 1px solid var(--wp--custom--semantic--border);
+	border-radius: var(--wp--custom--radius--full);
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+	text-decoration: none;
+	transition: border-color var(--wp--custom--transition), background-color var(--wp--custom--transition);
+}
+
+@mixin pagination-hover {
+	border-color: var(--wp--custom--semantic--border-hover);
+	background: var(--wp--custom--semantic--surface-1);
+}
+
+@mixin pagination-current {
+	border-color: var(--wp--preset--color--primary);
+	background: var(--wp--preset--color--primary);
+	color: var(--wp--preset--color--base);
+}
+
+// Hover and press wash for buttons (see _buttons.scss): a layer of the button's
+// own text color, drawn as an inset shadow so it follows the radius and animates.
+$hover-tint: 12%;
+$press-tint: 20%;
+
+@mixin tint( $amount ) {
+	box-shadow: inset 0 0 0 100vmax color-mix(in srgb, currentColor $amount, transparent);
+}
+
+@mixin button-states {
+	&:hover:not(:disabled, [aria-disabled="true"]) {
+		@include tint( $hover-tint );
+	}
+
+	&:active:not(:disabled, [aria-disabled="true"]) {
+		@include tint( $press-tint );
+	}
+}

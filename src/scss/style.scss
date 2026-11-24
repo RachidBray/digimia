@@ -1,0 +1,27 @@
+// ==========================================================================
+// Digimia — Main Theme Stylesheet
+// ==========================================================================
+// This file is the single entry point for the theme's main stylesheet.
+// It imports all partials in the correct order. The WordPress theme header
+// comment is injected automatically by Webpack's BannerPlugin.
+// ==========================================================================
+
+@use 'variables';
+@use 'reset';
+@use 'accessibility';
+@use 'buttons';
+@use 'forms';
+@use 'edd-elements';
+@use 'journal';
+@use 'storefront-home';
+@use 'storefront-sections';
+@use 'marketing-sections';
+@use 'components';
+@use 'product-page';
+@use 'product-reviews';
+@use 'account';
+@use 'helpers';
+@use 'header';
+@use 'theme-toggle';
+@use 'scrollbar';
+@use 'rtl';

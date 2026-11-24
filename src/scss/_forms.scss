@@ -1,0 +1,164 @@
+/* ============================================================================
+   Form System Refactor — theme.json Driven
+   ========================================================================= */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: var(--wp--preset--spacing--small);
+}
+
+.form-label {
+    display: block;
+    font-size: var(--wp--preset--font-size--x-small);
+    font-weight: 500;
+    color: var(--wp--custom--semantic--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.form-helper,
+.form-error {
+    font-size: var(--wp--preset--font-size--x-small);
+    margin-top: 2px;
+}
+
+.form-helper {
+    color: var(--wp--custom--semantic--text-tertiary);
+}
+
+.form-error {
+    color: var(--wp--custom--semantic--error);
+    display: none;
+}
+
+.is-error .form-error {
+    display: block;
+}
+
+/* Inputs — Consuming WP Tokens */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="date"],
+input[type="time"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    // Browsers give select and date fields their own font.
+    font-family: inherit;
+    // 16px at every width: iOS zooms the page when a field under 16px gets focus.
+    font-size: 1rem;
+    color: var(--wp--custom--semantic--input-text);
+    background-color: var(--wp--custom--semantic--input-bg);
+    border: 1px solid var(--wp--custom--semantic--input-border);
+    border-radius: var(--wp--custom--radius--base);
+    transition: all var(--wp--custom--transition);
+
+    &::placeholder {
+        color: var(--wp--custom--semantic--input-placeholder);
+        opacity: 0.6;
+    }
+
+    &:hover:not(:disabled) {
+        border-color: var(--wp--custom--semantic--border-hover);
+    }
+
+    &:focus {
+        border-color: var(--wp--preset--color--primary);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background-color: var(--wp--custom--semantic--surface-1);
+    }
+}
+
+/* Custom switch consuming tokens */
+.form-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+
+    input {
+        appearance: none;
+        width: 36px;
+        height: 20px;
+        background-color: var(--wp--custom--semantic--surface-3);
+        border-radius: 20px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #FFF;
+            border-radius: 50%;
+            top: 2px;
+            inset-inline-start: 2px;
+            transition: transform 0.2s;
+        }
+
+        &:checked {
+            background-color: var(--wp--preset--color--primary);
+
+            &::after {
+                transform: translateX(16px);
+            }
+        }
+
+        // The knob slides toward the end of the line.
+        &:checked:dir(rtl)::after {
+            transform: translateX(-16px);
+        }
+    }
+}
+
+/* Checkboxes and Radios */
+input[type="checkbox"],
+input[type="radio"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin: 0;
+    // The darker border: an unchecked box must stay visible on white.
+    border: 1px solid var(--wp--custom--semantic--border-hover);
+    background-color: var(--wp--custom--semantic--input-bg);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    transition: all var(--wp--custom--transition);
+
+    &:checked {
+        background-color: var(--wp--preset--color--primary);
+        border-color: var(--wp--preset--color--primary);
+    }
+
+    // The checkmark is a mask filled with `base`, so it stays readable when
+    // `primary` turns light in dark mode.
+    &[type="checkbox"]:checked::after {
+        position: absolute;
+        inset: 0;
+        background-color: var(--wp--preset--color--base);
+        content: "";
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M5 13l4 4L19 7'%3E%3C/path%3E%3C/svg%3E") center / 12px no-repeat;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M5 13l4 4L19 7'%3E%3C/path%3E%3C/svg%3E") center / 12px no-repeat;
+    }
+
+}
+
+input[type="radio"] {
+    border-radius: 50%;
+}

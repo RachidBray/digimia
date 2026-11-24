@@ -1,0 +1,20 @@
+name: Feature idea
+description: Something you'd like Digimia to do.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What do you want to do?
+      description: What you're trying to build or change on your store, and what gets in the way today.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: How do you picture it?
+      description: A new pattern, a style, a setting… Links to sites that do it well help.
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything else?

@@ -1,0 +1,98 @@
+/* ============================================================================
+   Accessibility & Focus — theme.json Driven
+   ========================================================================= */
+
+:focus-visible {
+    // An outline, not a box shadow: buttons, EDD buttons, and social links set
+    // `box-shadow: none` and wiped the old ring out, and forced-colors mode
+    // (Windows High Contrast) drops shadows. The brand color is solid so the
+    // ring reaches 3:1 on every surface (WCAG 1.4.11); Brand and Accent
+    // sections swap it for their text color (_variables.scss).
+    outline: 2px solid var(--wp--custom--semantic--focus-ring);
+    outline-offset: 2px;
+}
+
+// Touch targets reach 24px (WCAG 2.5.8) for links that stand on their own:
+// a paragraph holding only a link ("Learn more"), post titles in cards, and
+// category labels. The padding grows the hit area and the matching negative
+// margin gives the space back, so an inline or inline-block link does not
+// move. A block link would collapse that margin into its parent's, so the
+// term chips (which have their own padding) and the rating fact are left out,
+// and `:where()` lets any component's own spacing win. EDD's show-password
+// button is 18px tall.
+:where(p:not(.digimia-product-rating) > a:only-child, .wp-block-post-title a, .wp-block-post-terms:not(.is-style-term-button) a) {
+    margin-block: -0.25rem;
+    padding-block: 0.25rem;
+}
+
+.wp-hide-pw {
+    min-height: 1.5rem;
+}
+
+.no-focus-ring:focus-visible {
+    outline: none;
+}
+
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--base);
+    padding: 12px 24px;
+    z-index: 1000;
+    border-radius: 0 0 var(--wp--custom--radius--base) var(--wp--custom--radius--base);
+    font-weight: 600;
+    text-decoration: none;
+    transition: top 0.3s;
+
+    &:focus {
+        top: 0;
+    }
+}
+
+// A visually hidden first child (the product templates' "Description"
+// heading) must not push the next block down by the block gap.
+:is(.is-layout-flow, .is-layout-constrained) > .screen-reader-text:first-child + * {
+    margin-block-start: 0;
+}
+
+// WordPress's own hidden-text rule, with the size locked: layout rules that
+// size every child (the product columns on phones set width: 100%) stretched
+// the hidden "Description" heading past the screen edge.
+.screen-reader-text {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

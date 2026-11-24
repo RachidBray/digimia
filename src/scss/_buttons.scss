@@ -1,0 +1,108 @@
+@use 'mixins' as *;
+
+// ==========================================================================
+// Hover and press states (docs/ai/design-system.md, "Interaction states")
+// ==========================================================================
+//
+// Hover never swaps colors. A button keeps its background and text and gets a
+// wash of its own text color on top, so every button variation, section style,
+// color mode, and EDD button reads correctly without per-variation rules: dark
+// buttons get lighter, light buttons darker, outline buttons a soft fill.
+// The wash is an inset shadow, so it follows the radius and animates
+// (mixins: tint, button-states).
+
+
+:where(.wp-element-button, .wp-block-button__link, .edd-submit, #edd-purchase-button) {
+	transition: box-shadow var(--wp--custom--transition), transform var(--wp--custom--transition);
+}
+
+:where(.wp-element-button, .wp-block-button__link, .edd-submit, #edd-purchase-button):where(:hover:not(:disabled, [aria-disabled="true"])) {
+	@include tint( $hover-tint );
+}
+
+:where(.wp-element-button, .wp-block-button__link, .edd-submit, #edd-purchase-button):where(:active:not(:disabled, [aria-disabled="true"])) {
+	@include tint( $press-tint );
+}
+
+// Outline buttons draw their ring with an inset shadow too (see blocks/_core-button.scss).
+.wp-block-button.is-style-outline .wp-block-button__link:hover {
+	box-shadow: inset 0 0 0 2px currentColor, inset 0 0 0 100vmax color-mix(in srgb, currentColor $hover-tint, transparent);
+}
+
+.wp-block-button.is-style-outline .wp-block-button__link:active {
+	box-shadow: inset 0 0 0 2px currentColor, inset 0 0 0 100vmax color-mix(in srgb, currentColor $press-tint, transparent);
+}
+
+// In Brand sections the Tint surface is a wash of the section's text color, so
+// its label takes that color too (dark text on the wash would be unreadable).
+.is-style-section-brand .is-style-secondary-button .wp-block-button__link {
+	color: var(--wp--preset--color--base);
+}
+
+// Header icon controls (theme switch, account, mini cart): a round wash, same idea.
+.digimia-theme-toggle,
+.digimia-account-link .wp-block-button__link,
+.wp-block-edd-cart.edd-blocks__cart-mini a {
+	border-radius: var(--wp--custom--radius--full);
+	transition: box-shadow var(--wp--custom--transition);
+
+	&:hover {
+		@include tint( 10% );
+	}
+}
+
+.digimia-theme-toggle {
+	padding: 0.35rem;
+}
+
+// The account link is an icon-only Button: drop the button fill and size it
+// like the other header icons (24px icon in a 0.35rem wash).
+.digimia-account-link .wp-block-button__link.is-icon-only {
+	width: auto;
+	padding: 0.35rem;
+	background: transparent;
+	color: var(--wp--custom--semantic--text-primary);
+	box-shadow: none;
+	font-size: 1.2rem;
+	line-height: 1;
+
+	.wp-block-button__icon svg {
+		width: 24px;
+		height: 24px;
+		margin: 0;
+	}
+}
+
+// ==========================================================================
+// Links: hover keeps the color and strengthens the underline
+// ==========================================================================
+//
+// A color change alone is nearly invisible between near-black text and the dark
+// brand green, and color-only feedback fails WCAG 1.4.1. The underline works on
+// every surface and in both modes.
+
+a {
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.2em;
+	text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+	transition: text-decoration-color var(--wp--custom--transition);
+
+	&:hover {
+		text-decoration-color: currentColor;
+	}
+}
+
+// Links that are not underlined at rest (navigation, titles, sidebar lists)
+// get an underline on hover.
+.wp-block-navigation .wp-block-navigation-item__content,
+.wp-block-post-title a,
+.digimia-sidebar-posts a,
+.digimia-sidebar-topics a,
+.digimia-product-card__terms a {
+	text-underline-offset: 0.3em;
+
+	&:hover {
+		text-decoration-line: underline;
+		text-decoration-color: currentColor;
+	}
+}

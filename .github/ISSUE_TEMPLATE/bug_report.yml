@@ -1,0 +1,59 @@
+name: Bug report
+description: Something in Digimia looks wrong or doesn't work.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you saw, on which page or in which pattern.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we see it?
+      description: The steps that show the problem on a site with Digimia.
+      placeholder: |
+        1. Insert the "Pricing: three plans" pattern on a page.
+        2. Open the page on a phone.
+        3. The third plan's button overflows its card.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+  - type: input
+    id: theme-version
+    attributes:
+      label: Digimia version
+      description: Appearance → Themes, then the theme's details.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: pro
+    attributes:
+      label: Is Digimia Pro active?
+      options:
+        - "No"
+        - "Yes"
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: WordPress, Easy Digital Downloads, and PHP versions
+      description: Tools → Site Health → Info lists all three.
+      placeholder: "WordPress 7.1, Easy Digital Downloads 3.7, PHP 8.3"
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: "Safari on an iPhone 15"
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Drag images here. A screenshot usually saves a round of questions.

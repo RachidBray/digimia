@@ -1,0 +1,352 @@
+/* Menu bar
+--------------------------------------------- */
+
+// The current page's link, and a dropdown's label under the pointer, are
+// underlined (the site header mutes its links instead, at the end).
+.wp-block-navigation__responsive-container:not(.is-menu-open) .wp-block-navigation__container {
+	.current-menu-item > a,
+	.has-child button:hover {
+		text-decoration: underline;
+	}
+}
+
+// Dropdowns: a border and a soft shadow, so the menu has an edge on a white
+// page. The surface color replaces core's white, which stayed white in dark mode.
+.wp-block-navigation__responsive-container:not(.is-menu-open) .wp-block-navigation__submenu-container {
+	border: 1px solid var(--wp--custom--semantic--border) !important;
+	background-color: var(--wp--custom--semantic--surface-0);
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--small);
+	line-height: var(--wp--custom--line-height--snug);
+	min-width: 225px !important;
+	margin-inline-start: calc(var(--wp--preset--spacing--medium) * -1);
+	padding: 0;
+	z-index: 20 !important;
+	border-radius: var(--wp--custom--radius--lg);
+	box-shadow: var(--wp--preset--shadow--large);
+}
+
+// A dropdown opens under its label, toward the end of the line, its links lined
+// up with the label (the negative margin above). Core opens every dropdown of a
+// right-aligned menu the other way, so it hung off to one side of its label.
+// src/js/dropdown-menu.js marks an item `data-digimia-flip` when its panel would
+// run off the screen, and the panel opens toward the start instead.
+.wp-block-navigation .wp-block-navigation__responsive-container:not(.is-menu-open) :is(.wp-block-navigation__container, .wp-block-page-list) > .has-child {
+	> .wp-block-navigation__submenu-container {
+		inset-inline: 0 auto;
+	}
+
+	&[data-digimia-flip] > .wp-block-navigation__submenu-container {
+		inset-inline: auto 0;
+	}
+}
+
+// A dropdown inside a dropdown opens beside its parent, toward the end of the
+// line or, flipped, the start.
+.wp-block-navigation .wp-block-navigation__responsive-container:not(.is-menu-open) :is(.wp-block-navigation__container, .wp-block-page-list) .wp-block-navigation__submenu-container .has-child {
+	> .wp-block-navigation__submenu-container {
+		margin-inline-start: 0;
+		top: 0 !important;
+		inset-inline: 100% auto;
+	}
+
+	&[data-digimia-flip] > .wp-block-navigation__submenu-container {
+		inset-inline: auto 100%;
+	}
+}
+
+// Core points a nested menu's arrow toward the end of the line; a flipped one
+// points toward the start.
+@media (min-width: 782px) {
+	.wp-block-navigation .wp-block-navigation__submenu-container .has-child[data-digimia-flip] > :is(.wp-block-navigation__submenu-icon, .wp-block-navigation-item__content) svg {
+		transform: rotate(90deg);
+
+		&:dir(rtl) {
+			transform: rotate(-90deg);
+		}
+	}
+}
+
+// Inside a dropdown: room above the first link and below the last, the
+// panel's rounded corners on its first and last items, and roomy links.
+.wp-block-navigation__responsive-container:not(.is-menu-open) {
+	:where(.wp-block-navigation__submenu-container) {
+		li:first-child {
+			padding-top: var(--wp--preset--spacing--small);
+			border-start-start-radius: var(--wp--custom--radius--lg);
+			border-start-end-radius: var(--wp--custom--radius--lg);
+		}
+
+		li:last-child {
+			padding-bottom: var(--wp--preset--spacing--small);
+			border-end-start-radius: var(--wp--custom--radius--lg);
+			border-end-end-radius: var(--wp--custom--radius--lg);
+		}
+
+		a,
+		.wp-block-navigation-submenu__toggle {
+			padding: var(--wp--preset--spacing--small) var(--wp--preset--spacing--medium) !important;
+		}
+	}
+
+	.has-child .wp-block-navigation__submenu-container .wp-block-navigation__submenu-icon {
+		margin-inline-end: var(--wp--preset--spacing--small);
+	}
+}
+
+/* Phone menu, WordPress's own
+--------------------------------------------- */
+
+// These style core's default phone menu. A Navigation Overlay part (core adds
+// .disable-default-overlay) is styled in the next section instead. Full-width
+// rows with a 60px arrow button at the end of each parent, and a soft tint
+// behind the current page and the row under the finger.
+.wp-block-navigation__responsive-container.is-menu-open:not(.disable-default-overlay) {
+	&.has-modal-open {
+		padding: var(--wp--preset--spacing--medium);
+
+		:is(.wp-block-navigation__container, .wp-block-page-list) {
+			width: 100%;
+		}
+
+		.wp-block-navigation__container {
+			gap: 0.3125rem !important;
+
+			li:not(.wp-social-link) {
+				position: relative;
+				width: 100%;
+				padding: 0;
+			}
+		}
+	}
+
+	.wp-block-navigation__responsive-container-content {
+		gap: var(--wp--preset--spacing--medium);
+
+		.has-child .wp-block-navigation__submenu-container {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.3125rem;
+			width: 100%;
+			margin: 0;
+			padding-block: 0.3125rem 0;
+			padding-inline: 1.25rem 0;
+			border-radius: 0;
+		}
+
+		.wp-block-navigation__submenu-icon {
+			display: block;
+			position: absolute;
+			top: 0.3125rem;
+			inset-inline-end: 0;
+			z-index: 10;
+			width: 3.75rem;
+			height: auto;
+			margin: 0;
+			padding: 0.9375rem 0;
+
+			svg {
+				height: 1rem;
+				margin: 0;
+			}
+		}
+
+		.wp-block-navigation-item__content {
+			width: 100%;
+			padding-block: 0.9375rem;
+			padding-inline: 0.9375rem 3.75rem;
+			border-radius: var(--wp--custom--radius--sm);
+			font-size: var(--wp--preset--font-size--base);
+		}
+	}
+
+	.wp-block-navigation__container :is(.current-menu-item, .wp-block-navigation-item:hover) > .wp-block-navigation-item__content {
+		background: color-mix(in srgb, currentColor, transparent 97%);
+		text-decoration: none;
+		-webkit-tap-highlight-color: transparent;
+		transition: background-color var(--wp--custom--transition);
+	}
+}
+
+// A parent loses its tint while the pointer is on its submenu.
+.wp-block-navigation__container .wp-block-navigation-item:has(.wp-block-navigation__submenu-container:hover) > .wp-block-navigation-item__content {
+	background: transparent;
+}
+
+// Submenus set to always show (core's .open-always) stay visible, in the editor too.
+// The :where() keeps this rule's weight equal to the open rule below, which must win.
+.wp-block-navigation .has-child:where(:not(.open-always)) .wp-block-navigation__submenu-container {
+	display: none;
+}
+
+// In the editor, a selected item's dropdown opens so its links can be edited.
+.wp-block-navigation-submenu__toggle[aria-expanded="true"] ~ .wp-block-navigation-submenu,
+.wp-block-navigation-submenu__toggle[aria-expanded="true"] ~ .wp-block-navigation__submenu-container,
+.has-child:is(.is-selected, .has-child-selected) > .wp-block-navigation__submenu-container {
+	display: flex;
+}
+
+/* Phone menu from a Navigation Overlay part
+--------------------------------------------- */
+
+// Links under a parent: body size, muted, the current page in the panel's own
+// text color so it also reads on a Brand panel.
+@mixin overlay-submenu {
+	font-size: var(--wp--preset--font-size--base);
+	font-weight: 400;
+
+	.wp-block-navigation-item__content {
+		padding-block: 0.375rem;
+		color: var(--wp--custom--semantic--text-secondary);
+	}
+
+	.current-menu-item > .wp-block-navigation-item__content {
+		color: inherit;
+		font-weight: 500;
+	}
+}
+
+// The part draws its own panel; the site menu inside it is a full-width list.
+// Core keeps every submenu open while the overlay is open, so a parent reads
+// as a group heading with its links listed under it, and the arrows go. The
+// extra classes outrank core's always-open submenu rules, which space links
+// with the menu's block gap.
+.wp-block-navigation__responsive-container.disable-default-overlay .wp-block-navigation__overlay-container {
+	min-height: 100%;
+
+	.wp-block-navigation,
+	.wp-block-navigation__container {
+		width: 100%;
+	}
+
+	.wp-block-navigation__container {
+		gap: 0;
+	}
+
+	// The part sits inside the Navigation block, which drops every link
+	// underline; links in text keep theirs (WCAG 1.4.1). Link lists keep the
+	// footer's muted, plain style.
+	p:not(.wp-block-site-title) a {
+		text-decoration: underline;
+	}
+
+	.wp-block-navigation-item {
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.wp-block-navigation-item__content {
+		padding-block: 0.625rem;
+		text-align: start;
+		text-decoration: none;
+	}
+
+	// Core's close button keeps the browser's black button text; it takes the
+	// panel's text color, with a 44px target whose icon lines up with the edge.
+	.wp-block-navigation-overlay-close {
+		width: 2.75rem;
+		height: 2.75rem;
+		margin-inline-end: -0.625rem;
+		color: inherit;
+	}
+
+	.has-child {
+		gap: 0;
+	}
+
+	.wp-block-navigation__submenu-icon {
+		display: none;
+	}
+
+	// Shown outright: the theme hides closed submenus until their arrow opens them.
+	.has-child .wp-block-navigation__submenu-container {
+		display: flex;
+		position: static;
+		height: auto;
+		width: 100%;
+		visibility: visible;
+		opacity: 1;
+		gap: 0;
+		min-width: 0 !important;
+		padding: 0 0 var(--wp--preset--spacing--small);
+		padding-inline-start: var(--wp--preset--spacing--medium);
+		border: 0;
+		background: transparent;
+		box-shadow: none;
+		@include overlay-submenu;
+	}
+}
+
+// The same look while the part is edited in the Site Editor, where there is no
+// overlay wrapper; only always-open submenus are matched.
+.editor-styles-wrapper .wp-block-navigation .has-child.open-always {
+	gap: 0;
+
+	.wp-block-navigation__submenu-container {
+		gap: 0;
+		padding: 0 0 var(--wp--preset--spacing--small);
+		padding-inline-start: var(--wp--preset--spacing--medium);
+		@include overlay-submenu;
+	}
+}
+
+/* Header menu: full while it fits, the button when it doesn't
+--------------------------------------------- */
+
+// Core swaps the menu for its button below 600px only. In the theme's headers
+// src/js/header-menu.js tries the full menu and marks the Navigation block
+// `data-digimia-menu="button"` when its top-level items don't fit on one line.
+@mixin menu-button {
+	.wp-block-navigation__responsive-container-open:not(.always-shown) {
+		display: flex;
+	}
+
+	.wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
+		display: none;
+	}
+}
+
+@media (min-width: 600px) {
+	.digimia-site-header .wp-block-navigation[data-digimia-menu="button"] {
+		@include menu-button;
+	}
+}
+
+// Until the script has measured, tablets show the button: most menus don't
+// fit there, and the header is as tall with the button as with a one-line
+// menu, so nothing moves when a short menu takes its place. Not in the editor,
+// where the items stay in view to be edited, nor without scripts, which the
+// button needs to open.
+@media (min-width: 600px) and (max-width: 1023px) and (scripting: enabled) {
+	body:not(.editor-styles-wrapper) .digimia-site-header .wp-block-navigation:not([data-digimia-menu]) {
+		@include menu-button;
+	}
+}
+
+// The phone menu's open and close buttons: an icon on a small tinted square.
+.wp-block-navigation__responsive-container-open,
+.wp-block-navigation__responsive-container-close {
+	padding: 0.25rem;
+	border-radius: 3px;
+	background: var(--wp--custom--semantic--surface-1);
+	color: var(--wp--custom--semantic--text-primary);
+}
+
+/* Header navigation: muted links that turn full strength on hover and for
+   the current page, instead of underlines. The mobile overlay keeps its own
+   styles below. */
+.digimia-site-header .wp-block-navigation__responsive-container:not(.is-menu-open) .wp-block-navigation-item__content {
+	color: var(--wp--custom--semantic--text-secondary);
+	text-decoration: none;
+	transition: color var(--wp--custom--transition);
+
+	&:hover,
+	&:focus-visible {
+		color: var(--wp--custom--semantic--text-primary);
+	}
+}
+
+.digimia-site-header .wp-block-navigation__responsive-container:not(.is-menu-open) .wp-block-navigation__container .current-menu-item > a {
+	color: var(--wp--custom--semantic--text-primary);
+	text-decoration: none;
+}

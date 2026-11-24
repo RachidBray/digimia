@@ -1,0 +1,2 @@
+!function(){"use strict";var e,t;e=window.wp,t=window.digimiaProductFacts,e?.blocks?.registerBlockBindingsSource&&t&&e.blocks.registerBlockBindingsSource({name:"digimia/product",usesContext:["postId","postType"],getFieldsList(){return Object.entries(t).map(([e,t])=>({label:t,type:"string",args:{key:e}}))},getValues({bindings:e}){const i={};return Object.entries(e).forEach(([e,{args:s}])=>{i[e]=t[s?.key]||s?.key}),i},canUserEditValue:()=>!1})}();
+//# sourceMappingURL=product-bindings.js.map

@@ -1,0 +1,50 @@
+name: Create Release
+
+# Runs when a version tag is pushed (`git tag v1.0.0` then `git push origin v1.0.0`),
+# not on every push to main. The tag must match the Version in style.css.
+# The zip is the WordPress.org theme zip, as `yarn dist` makes it: `git archive`
+# leaves out everything .gitattributes marks export-ignore.
+# Built CSS and JS are committed, so the zip needs no build step here.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check the tag matches the theme version
+        run: |
+          VERSION=$(grep -Po '^Version: \K.*' style.css | tr -d '\r')
+          if [ "v$VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "The tag $GITHUB_REF_NAME does not match Version $VERSION in style.css."
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Take the release notes from the readme changelog
+        run: |
+          # The lines under "= <version> =" in readme.txt, up to the next "=" heading.
+          awk -v heading="= $VERSION =" '$0 == heading { found = 1; next } found && /^=/ { exit } found' readme.txt > release-notes.md
+          if ! grep -q '[^[:space:]]' release-notes.md; then
+            echo "readme.txt has no changelog entry for $VERSION."
+            exit 1
+          fi
+
+      - name: Create the theme zip
+        run: git archive --format=zip --prefix=digimia/ -o digimia.zip HEAD
+
+      - name: Create the release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Digimia ${{ env.VERSION }}
+          body_path: release-notes.md
+          files: digimia.zip

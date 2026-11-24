@@ -1,0 +1,20 @@
+// Post Author: a small round photo, centered on the name beside it.
+.wp-block-post-author {
+	align-items: center;
+}
+
+.wp-block-post-author__name {
+	margin-bottom: 0;
+}
+
+.wp-block-post-author__avatar {
+	display: inline-flex;
+	align-items: center;
+	margin-inline-end: 0.8rem;
+
+	img {
+		width: 1.625rem;
+		height: 1.625rem;
+		border-radius: var(--wp--custom--radius--full);
+	}
+}

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 760" fill="none">
+  <!-- Palette colors are CSS custom properties with the default palette as fallback; inc/blocks.php inlines this file so it follows the active palette and dark mode. -->
+  <style>
+    .dg-primary{fill:var(--wp--preset--color--primary,#053338)}
+    .dg-alt{fill:var(--wp--preset--color--primary-alt,#DAFF8C)}
+    .dg-base{fill:var(--wp--preset--color--base,#FFFFFF)}
+    .dg-soft{fill:var(--wp--preset--color--tertiary,#ECF3F1)}
+    .dg-line{fill:var(--wp--preset--color--border-light,#DFE8E5)}
+    .dg-line-dark{fill:var(--wp--preset--color--border-dark,#BCCBC6)}
+    .dg-meta{fill:var(--wp--preset--color--secondary,#616A6B)}
+    .dg-on-alt{fill:var(--wp--custom--semantic--on-accent,#0C1F24)}
+    .dg-s-primary{stroke:var(--wp--preset--color--primary,#053338)}
+    .dg-s-on-alt{stroke:var(--wp--custom--semantic--on-accent,#0C1F24)}
+    .dg-s-meta{stroke:var(--wp--preset--color--secondary,#616A6B)}
+    .dg-s-line-dark{stroke:var(--wp--preset--color--border-dark,#BCCBC6)}
+  </style>
+  <rect width="900" height="760" rx="36" class="dg-soft"/>
+  <path d="M82 590c86-112 203-166 350-162 138 4 249 65 386 44v288H82V590Z" class="dg-line"/>
+  <rect x="129" y="137" width="478" height="493" rx="24" class="dg-base dg-s-line-dark" stroke-width="3" transform="rotate(-8 129 137)"/>
+  <rect x="254" y="102" width="478" height="493" rx="24" class="dg-primary" transform="rotate(7 254 102)"/>
+  <rect x="255" y="103" width="478" height="493" rx="24" class="dg-base dg-s-line-dark" stroke-width="3" transform="rotate(7 255 103)"/>
+  <path d="m346 280 118-118 118 118H346Z" class="dg-alt"/>
+  <circle cx="464" cy="254" r="54" class="dg-meta" fill-opacity=".55"/>
+  <path d="M348 377c27-46 70-70 128-70s101 24 128 70" class="dg-s-primary" stroke-width="12" stroke-linecap="round"/>
+  <rect x="342" y="415" width="238" height="15" rx="7.5" class="dg-primary"/>
+  <rect x="374" y="447" width="174" height="10" rx="5" class="dg-line-dark"/>
+  <rect x="387" y="491" width="148" height="42" rx="21" class="dg-alt"/>
+  <rect x="422" y="507" width="79" height="10" rx="5" class="dg-on-alt"/>
+  <path d="M139 636c26-20 55-30 88-30 44 0 75 23 113 23 28 0 52-7 72-22" class="dg-s-meta" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="735" cy="169" r="52" class="dg-alt"/>
+  <path d="m718 168 13 13 25-29" class="dg-s-on-alt" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M761 546h60M791 516v60" class="dg-s-meta" stroke-width="7" stroke-linecap="round"/>
+</svg>

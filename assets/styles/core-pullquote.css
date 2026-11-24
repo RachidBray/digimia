@@ -1,0 +1,3 @@
+.wp-block-pullquote blockquote{margin:0}.wp-block-pullquote p{margin-block-start:var(--wp--preset--spacing--medium)}.wp-block-pullquote cite{display:block}.wp-block-pullquote:is(.alignleft,.alignright){padding-bottom:var(--wp--preset--spacing--medium)}@media only screen and (max-width: 781px){.wp-block-pullquote:is(.alignleft,.alignright){max-width:100%;margin-inline:0 !important}}
+
+/*# sourceMappingURL=core-pullquote.css.map*/

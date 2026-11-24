@@ -1,0 +1,7 @@
+// Code blocks keep each line whole and scroll sideways when a line is
+// longer than the block.
+.wp-block-code code {
+	overflow-x: auto;
+	overflow-wrap: normal;
+	white-space: pre;
+}

@@ -1,0 +1,612 @@
+@use 'mixins';
+
+// ==========================================================================
+// Customer account (pattern `store-account`) and extension surfaces
+// ==========================================================================
+// A section menu beside the sections, license keys from EDD Software
+// Licensing as cards, and subscriptions from EDD Recurring Payments as
+// panels. inc/edd-account.php hides sections that do not apply;
+// src/js/edd-account.js adds copy buttons and the current-section state.
+
+/* Layout and menu
+------------------------------------------------------------------------ */
+
+.digimia-account-main > .digimia-account-section {
+	scroll-margin-top: calc(var(--wp-admin--admin-bar--height, 0px) + var(--wp--preset--spacing--large));
+}
+
+// Hairlines between sections, so a hidden section leaves no double line.
+.digimia-account-main > .digimia-account-section + .digimia-account-section {
+	padding-top: var(--wp--preset--spacing--large);
+	border-top: 1px solid var(--wp--custom--semantic--border);
+}
+
+.digimia-account-nav {
+	display: grid;
+	gap: 0.25rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		margin: 0;
+	}
+
+	a {
+		display: block;
+		padding: 0.4rem 0.85rem;
+		border-radius: var(--wp--custom--radius--base);
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 600;
+		text-decoration: none;
+		transition: background-color var(--wp--custom--transition), color var(--wp--custom--transition);
+
+		&:hover {
+			background: var(--wp--custom--semantic--surface-1);
+			color: var(--wp--custom--semantic--text-primary);
+		}
+
+		&[aria-current="true"] {
+			background: var(--wp--custom--semantic--brand-muted);
+			color: var(--wp--custom--semantic--text-primary);
+		}
+	}
+}
+
+@media (min-width: 782px) {
+	.digimia-account-layout > .digimia-account-aside {
+		position: sticky;
+		top: calc(var(--wp-admin--admin-bar--height, 0px) + var(--wp--preset--spacing--large));
+		align-self: flex-start;
+	}
+}
+
+// Phones: the menu is one scrolling row of chips above the sections.
+@media (max-width: 781px) {
+	.digimia-account-nav {
+		display: flex;
+		gap: 0.5rem;
+		margin-inline: calc(-1 * var(--wp--preset--spacing--medium));
+		padding-inline: var(--wp--preset--spacing--medium);
+		overflow-x: auto;
+		scrollbar-width: none;
+
+		a {
+			border: 1px solid var(--wp--custom--semantic--border);
+			border-radius: var(--wp--custom--radius--full);
+			white-space: nowrap;
+		}
+	}
+}
+
+/* License keys (EDD Software Licensing)
+------------------------------------------------------------------------ */
+
+// EDD Software Licensing prints a two-column table with line breaks and
+// separator characters. Its cells become `display: contents`, so each row is
+// one flex card whose parts are ordered:
+// 1 product and status · 3 key · 4 expiry and activations · 7 actions ·
+// 8 purchase link · 9 renewal note. The row's `::before` breaks the line
+// before the actions. Parts added by other extensions land with the actions.
+// Only the account table (`[edd_license_keys]`, with a "License Details"
+// column): the per-order overview uses the same ID with other columns.
+#edd_sl_license_keys:has(th.edd_sl_details) {
+	display: block;
+	width: 100%;
+	// Only the bottom: the top margin is the section's block gap.
+	margin-inline: 0;
+	margin-bottom: 0;
+	border: 0;
+	border-collapse: separate;
+
+	thead {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	tbody {
+		display: grid;
+		gap: var(--wp--preset--spacing--medium);
+	}
+
+	tr.edd_sl_license_row {
+		@include mixins.panel;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		row-gap: 0.75rem;
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+
+		&::before {
+			flex-basis: 100%;
+			order: 6;
+			height: 0;
+			content: "";
+		}
+	}
+
+	td {
+		display: contents;
+
+		> * {
+			order: 7;
+		}
+	}
+
+	br,
+	.edd_sl_key_sep,
+	.edd_sl_limit_max ~ .edd_sl_limit_sep {
+		display: none;
+	}
+
+	.edd_sl_status_label {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+	}
+
+	.edd_sl_item_name {
+		flex: 1 1 auto;
+		order: 1;
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--base);
+		font-weight: 600;
+	}
+
+	.edd_sl_license_price_option {
+		color: var(--wp--custom--semantic--text-secondary);
+		font-weight: 400;
+	}
+
+	// Status as a chip in the status colors.
+	.edd_sl_license_status {
+		--digimia-status: var(--wp--custom--semantic--text-tertiary);
+		order: 2;
+		padding: 0.15rem 0.6rem;
+		border-radius: var(--wp--custom--radius--full);
+		background: color-mix(in srgb, var(--digimia-status) 14%, var(--wp--custom--semantic--surface-0));
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--x-small);
+		font-weight: 600;
+
+		&.edd-sl-active {
+			--digimia-status: var(--wp--custom--semantic--success);
+		}
+
+		&.edd-sl-expired {
+			--digimia-status: var(--wp--custom--semantic--warning);
+		}
+
+		&.edd-sl-disabled {
+			--digimia-status: var(--wp--custom--semantic--error);
+		}
+	}
+
+	// The key: a monospace field with the Copy button inside its right edge.
+	:is(.digimia-license-key, td > input.edd_sl_license_key) {
+		flex-basis: 100%;
+		order: 3;
+	}
+
+	.digimia-license-key {
+		position: relative;
+		display: block;
+	}
+
+	input.edd_sl_license_key {
+		width: 100%;
+		padding-inline-end: 5.5rem;
+		font-family: var(--wp--preset--font-family--monospace);
+		font-size: var(--wp--preset--font-size--small);
+		letter-spacing: 0.02em;
+	}
+
+	.digimia-license-key__copy {
+		position: absolute;
+		top: 50%;
+		inset-inline-end: 0.4rem;
+		padding: 0.25rem 0.75rem;
+		border: 1px solid var(--wp--custom--semantic--border-hover);
+		border-radius: var(--wp--custom--radius--full);
+		background: var(--wp--custom--semantic--surface-0);
+		color: var(--wp--custom--semantic--text-primary);
+		font-family: inherit;
+		font-size: var(--wp--preset--font-size--x-small);
+		font-weight: 600;
+		line-height: 1.4;
+		cursor: pointer;
+		transform: translateY(-50%);
+
+		&:hover {
+			border-color: var(--wp--preset--color--primary);
+		}
+	}
+
+	// Bundles: the included licenses under the key.
+	td > strong,
+	.edd-sl-child-licenses {
+		flex-basis: 100%;
+		order: 3;
+	}
+
+	.edd-sl-child-licenses {
+		display: grid;
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	// "Expires: November 4, 2027 · Activations: 2 / 5".
+	.edd_sl_item_expiration {
+		order: 4;
+	}
+
+	:is(.edd_sl_limit_label, .edd_sl_limit_used, .edd_sl_limit_sep, .edd_sl_limit_max) {
+		order: 5;
+	}
+
+	.edd_sl_limit_label::before {
+		margin-inline: 0.6rem;
+		color: var(--wp--custom--semantic--text-tertiary);
+		content: "·";
+	}
+
+	:is(.edd_sl_limit_used, .edd_sl_limit_max) {
+		color: var(--wp--custom--semantic--text-primary);
+		font-weight: 600;
+	}
+
+	// Manage sites, Extend, Upgrades: small outline pills.
+	td > a:not(.edd_sl_purchase_number) {
+		margin-inline-end: 0.5rem;
+		padding: 0.2rem 0.85rem;
+		border: 1px solid var(--wp--custom--semantic--border-hover);
+		border-radius: var(--wp--custom--radius--full);
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--x-small);
+		font-weight: 600;
+		text-decoration: none;
+		transition: border-color var(--wp--custom--transition);
+
+		&:hover {
+			border-color: var(--wp--preset--color--primary);
+		}
+	}
+
+	:is(.edd_sl_no_management, .edd_sl_no_upgrades) {
+		margin-inline-end: 0.75rem;
+		color: var(--wp--custom--semantic--text-tertiary);
+	}
+
+	.edd_sl_purchase_number {
+		order: 8;
+		margin-inline-start: auto;
+		color: var(--wp--custom--semantic--text-tertiary);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--wp--custom--semantic--text-primary);
+		}
+	}
+
+	.edd-recurring-license-renewal {
+		flex-basis: 100%;
+		order: 9;
+		color: var(--wp--custom--semantic--text-tertiary);
+		font-size: var(--wp--preset--font-size--x-small);
+	}
+}
+
+/* Subscriptions (EDD Recurring Payments)
+------------------------------------------------------------------------ */
+
+// In the account, one subscription per row, like the license cards.
+.digimia-account-subscriptions .edd-blocks__subscriptions-grid {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.edd-blocks-subscriptions__subscription {
+	@include mixins.panel;
+}
+
+.edd-blocks-subscriptions__subscription-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--wp--preset--spacing--small);
+	color: var(--wp--custom--semantic--text-primary);
+	font-weight: 600;
+}
+
+.edd-blocks-subscriptions__subcription-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem 1rem;
+	margin-top: var(--wp--preset--spacing--small);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+}
+
+// Label and value on one line at every width, labels in the quiet weight.
+.edd-blocks-subscriptions__subscription .edd-blocks__row {
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	gap: var(--wp--preset--spacing--small);
+
+	.edd-blocks__row-label {
+		flex-shrink: 0;
+		font-weight: 400;
+	}
+
+	.edd-blocks__row-value {
+		color: var(--wp--custom--semantic--text-primary);
+		text-align: end;
+	}
+}
+
+// Recurring prints its sub-views (details, transactions, payment update) as
+// loose headings, rows, and a 60px spacer block: one gap rhythm instead.
+.wp-block-edd-subscriptions {
+	display: grid;
+	gap: var(--wp--preset--spacing--medium);
+
+	> * {
+		margin: 0;
+	}
+
+	> .wp-block-spacer {
+		display: none;
+	}
+
+	> h3 {
+		margin-top: var(--wp--preset--spacing--small);
+		font-size: var(--wp--preset--font-size--medium);
+	}
+
+	.edd-blocks-subscriptions__transaction {
+		@include mixins.panel;
+	}
+}
+
+.edd-blocks-subscriptions__subscription-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+}
+
+// Payment method update: the card fields as a panel, expiry selects in a row.
+#edd-recurring-form {
+	display: grid;
+	gap: var(--wp--preset--spacing--medium);
+
+	fieldset {
+		@include mixins.panel;
+		display: grid;
+		gap: var(--wp--preset--spacing--medium);
+		margin: 0;
+
+		> p {
+			margin: 0;
+		}
+	}
+
+	legend {
+		float: inline-start;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		font-weight: 600;
+	}
+
+	#edd_secure_site_wrapper {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--wp--custom--semantic--text-tertiary);
+		font-size: var(--wp--preset--font-size--small);
+
+		svg {
+			fill: currentColor;
+		}
+	}
+
+	label.edd-label {
+		display: block;
+		margin-bottom: 0.4rem;
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 600;
+	}
+
+	.edd-description {
+		display: block;
+		margin-bottom: 0.4rem;
+		color: var(--wp--custom--semantic--text-tertiary);
+		font-size: var(--wp--preset--font-size--x-small);
+	}
+
+	.card-expiration select {
+		width: auto;
+	}
+
+	.exp-divider {
+		margin-inline: 0.5rem;
+	}
+
+	#edd-recurring-update-submit {
+		justify-self: start;
+	}
+}
+
+/* Back and cancel links styled as buttons
+------------------------------------------------------------------------ */
+
+// "All Subscriptions", "Subscription Details", "Cancel", and Software
+// Licensing's "Go back" are `.edd-submit` links: outline buttons, so the one
+// filled button on a screen is its real action. Cancel takes the error color.
+// The second `:is()` matches the same links with the ID specificity of the
+// shared EDD button rule (_edd-elements.scss), which sets `box-shadow: none`.
+body :is(.edd-blocks-subscriptions__subscription-actions > .edd-submit, .edd-manage-license-back.edd-submit):is(.edd-submit, #edd-purchase-button) {
+	padding: 0.55rem 1.1rem;
+	background: transparent;
+	box-shadow: inset 0 0 0 2px var(--wp--custom--semantic--border-hover);
+	color: var(--wp--custom--semantic--text-primary);
+	font-size: var(--wp--preset--font-size--small);
+
+	&:hover {
+		box-shadow: inset 0 0 0 2px currentColor;
+	}
+
+	&.edd-subscription-cancel {
+		color: var(--wp--custom--semantic--error);
+	}
+}
+
+/* Software Licensing: license overview and site management
+------------------------------------------------------------------------ */
+
+// These replace the whole account page (`?action=manage_licenses`).
+.edd-sl-manage-license-header {
+	margin-block: var(--wp--preset--spacing--medium) 0;
+	font-size: var(--wp--preset--font-size--large);
+}
+
+.edd-sl-manage-license-details {
+	display: grid;
+	gap: 0.35rem;
+	color: var(--wp--custom--semantic--text-secondary);
+	font-size: var(--wp--preset--font-size--small);
+
+	code {
+		font-family: var(--wp--preset--font-family--monospace);
+		color: var(--wp--custom--semantic--text-primary);
+	}
+
+	.edd-sl-manage-license-product span {
+		color: var(--wp--custom--semantic--text-primary);
+		font-weight: 600;
+	}
+}
+
+// The manage pages replace the account content, which has no spacing of its own.
+.wp-block-post-content:has(.edd-manage-license-back) {
+	padding-block: var(--wp--preset--spacing--xx-large);
+}
+
+// Sites (single license) and the per-order overview: full-width tables in a
+// panel. `separate` borders so the table itself takes the panel padding.
+:is(#edd_sl_license_sites, #edd_sl_license_keys:has(th.edd_sl_key)) {
+	@include mixins.panel;
+	width: 100%;
+	padding-block: var(--wp--preset--spacing--small);
+	border-collapse: separate;
+	border-spacing: 0;
+	font-size: var(--wp--preset--font-size--small);
+
+	:is(th, td) {
+		padding-block: 0.75rem;
+			padding-inline: 0 1rem;
+		border: 0;
+		border-bottom: 1px solid var(--wp--custom--semantic--border);
+		text-align: start;
+		vertical-align: middle;
+	}
+
+	tbody tr:last-child td {
+		border-bottom: 0;
+	}
+
+	th {
+		color: var(--wp--custom--semantic--text-tertiary);
+		font-size: var(--wp--preset--font-size--x-small);
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	td {
+		color: var(--wp--custom--semantic--text-primary);
+	}
+
+	td a {
+		font-weight: 600;
+	}
+
+	// Deactivate: a quiet link that turns red on hover.
+	a[href*="deactivate_site"] {
+		color: var(--wp--custom--semantic--text-secondary);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--wp--custom--semantic--error);
+		}
+	}
+}
+
+// Phones: the seven-column overview scrolls sideways inside its panel.
+@media (max-width: 781px) {
+	#edd_sl_license_keys:has(th.edd_sl_key) {
+		display: block;
+		overflow-x: auto;
+
+		:is(th, td) {
+			white-space: nowrap;
+		}
+	}
+}
+
+// Overview: the Copy button stands in for the key image toggle.
+#edd_sl_license_keys:has(th.edd_sl_key) {
+	.edd_sl_show_key {
+		display: none;
+	}
+
+	.digimia-license-key__copy {
+		padding: 0.15rem 0.7rem;
+		border: 1px solid var(--wp--custom--semantic--border-hover);
+		border-radius: var(--wp--custom--radius--full);
+		background: none;
+		color: var(--wp--custom--semantic--text-primary);
+		font-family: inherit;
+		font-size: var(--wp--preset--font-size--x-small);
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	.edd_sl_no_upgrades {
+		color: var(--wp--custom--semantic--text-tertiary);
+	}
+}
+
+// Add a site: the URL field and the button on one row.
+#edd_sl_license_add_site_form > div {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem;
+
+	> span {
+		flex-basis: 100%;
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+	}
+
+	input[name="site_url"] {
+		flex: 1 1 16rem;
+		width: auto;
+	}
+}
+
+// The button at the height of the URL field.
+body #edd_sl_license_add_site_form [type="submit"] {
+	padding-block: 0.6rem;
+}

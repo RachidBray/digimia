@@ -1,0 +1,31 @@
+{
+	"name": "addictedtoweb/digimia",
+	"description": "Digimia WordPress block theme for independent digital goods",
+	"type": "wordpress-theme",
+	"license": "GPL-3.0-or-later",
+	"authors": [
+		{
+			"name": "AddictedToWeb"
+		}
+	],
+	"require": {
+		"php": ">=7.4"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"php-parallel-lint/php-parallel-lint": "^1.4",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"squizlabs/php_codesniffer": "^3.13",
+		"wp-coding-standards/wpcs": "^3.1"
+	},
+	"scripts": {
+		"lint": "@php ./vendor/bin/parallel-lint --exclude .git --exclude vendor --exclude node_modules --exclude ref .",
+		"wpcs:scan": "@php ./vendor/bin/phpcs",
+		"wpcs:fix": "@php ./vendor/bin/phpcbf"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
+}

@@ -1,0 +1,242 @@
+@use 'variables';
+@use 'mixins';
+
+// ==========================================================================
+// Marketing sections
+// ==========================================================================
+// The marketing-section rules the free designs use, or share with Digimia
+// Pro's. Rules only Pro designs use live in Digimia Pro.
+
+// Short reassurance notes under a hero's buttons.
+.digimia-check-row > p {
+	margin: 0;
+}
+
+.digimia-check-row > p::before {
+	content: "\2713";
+	margin-inline-end: 0.5em;
+	color: var(--wp--preset--color--primary);
+	font-weight: 700;
+}
+
+// Release notes (product-release-notes): rows split by rules, each note led
+// by a pill for its kind (New, Improved, Fixed).
+.digimia-release {
+	padding-block: var(--wp--preset--spacing--large);
+	border-top: 1px solid var(--wp--custom--semantic--border);
+
+	&:last-child {
+		border-bottom: 1px solid var(--wp--custom--semantic--border);
+	}
+
+	> .wp-block-columns {
+		margin-block: 0;
+	}
+
+	.digimia-badge {
+		align-self: flex-start;
+	}
+}
+
+.digimia-book-hero .digimia-book-cover {
+	margin-inline: auto;
+}
+
+// Contact (hero-contact): method rows and the form card. Fields come from a
+// form plugin; the global field styles cover inputs, so the card only spaces
+// labels and gives a plain submit input the theme button look.
+.digimia-contact-method p {
+	margin: 0;
+}
+
+.digimia-message-card {
+	background: var(--wp--custom--semantic--surface-0);
+	box-shadow: var(--wp--preset--shadow--medium);
+
+	form > p,
+	form > div > p {
+		margin: 0 0 var(--wp--preset--spacing--medium);
+	}
+
+	label {
+		display: grid;
+		gap: 6px;
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 600;
+	}
+
+	input[type="submit"],
+	button[type="submit"] {
+		padding: var(--wp--custom--button--padding-block) var(--wp--custom--button--padding-inline);
+		border: 0;
+		border-radius: var(--wp--custom--button--radius);
+		background: var(--wp--preset--color--primary);
+		color: var(--wp--preset--color--base);
+		font: inherit;
+		font-size: var(--wp--custom--button--font-size);
+		font-weight: var(--wp--custom--button--font-weight);
+		line-height: var(--wp--custom--button--line-height);
+		cursor: pointer;
+
+		@include mixins.button-states;
+	}
+}
+
+// The empty slot a buyer replaces with their form plugin's block.
+.digimia-form-slot {
+	padding: var(--wp--preset--spacing--large);
+	border: 1px dashed var(--wp--custom--semantic--border-hover);
+	border-radius: var(--wp--custom--radius--base);
+
+	p {
+		margin: 0;
+	}
+}
+
+.digimia-service .digimia-plan__price p {
+	margin: 0;
+}
+
+// Shop sidebar (product-grid-sidebar, template-shop-sidebar): search, then
+// filter groups split by rules. It stays in view while the grid scrolls.
+.digimia-shop-sidebar {
+	position: sticky;
+	top: var(--wp--preset--spacing--large);
+
+	@media (max-width: 781px) {
+		position: static;
+	}
+}
+
+.digimia-filter {
+	padding-top: var(--wp--preset--spacing--medium);
+	border-top: 1px solid var(--wp--custom--semantic--border);
+
+	> * {
+		margin-block: 0;
+	}
+
+	> * + * {
+		margin-block-start: var(--wp--preset--spacing--medium);
+	}
+}
+
+// Tags as small pills instead of the outline style's boxes.
+.digimia-filter .wp-block-tag-cloud.is-style-outline a {
+	margin-block: 0 0.5rem;
+	margin-inline: 0 0.25rem;
+	padding: 0.25rem 0.75rem;
+	border-radius: var(--wp--custom--radius--full);
+}
+
+.digimia-filter-list {
+	display: grid;
+	gap: var(--wp--preset--spacing--small);
+	padding: 0;
+	list-style: none;
+
+	a {
+		color: var(--wp--custom--semantic--text-primary);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--wp--preset--color--primary);
+			text-decoration: underline;
+		}
+	}
+}
+
+/* SaaS homepage sections (hero-saas-glow, feature-ui-rows, feature-bento-automation,
+   feature-steps-panel, pricing-plans-brand, cta-brand-panel)
+   ------------------------------------------------------------------------- */
+
+// Marked words in headings: the core Highlight format with no background of
+// its own gets a marker band in light areas and the brand color in dark ones
+// (`marker` tokens in _variables.scss). A background picked in the editor
+// wins. Patterns write the transparent background the editor itself writes
+// (`rgba(0, 0, 0, 0)`): its Highlight tool fails on a mark with no style.
+:is(h1, h2, h3, .wp-block-heading) mark.has-inline-color:is(:not([style]), [style^="background-color:rgba(0, 0, 0, 0)"]) {
+	padding-inline: 0.06em;
+	background: linear-gradient(transparent 60%, var(--wp--custom--semantic--marker) 60%, var(--wp--custom--semantic--marker) 92%, transparent 92%);
+	color: var(--wp--custom--semantic--marker-text);
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+}
+
+// A small rounded label for a fact; a bold first word becomes a tag.
+.digimia-pill {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	width: fit-content;
+	margin-inline: 0;
+	padding-block: 0.3em;
+	padding-inline: 0.35em 0.9em;
+	border: 1px solid var(--wp--custom--semantic--border);
+	border-radius: var(--wp--custom--radius--full);
+	background: var(--wp--custom--semantic--surface-0);
+	font-size: var(--wp--preset--font-size--x-small);
+	font-weight: 600;
+	line-height: var(--wp--custom--line-height--snug);
+
+	// A constrained layout centers each child with !important auto margins,
+	// which pulls a fit-content pill to the middle; only a centered one goes there.
+	.is-layout-constrained > &:not(.has-text-align-center) {
+		margin-inline-start: 0 !important;
+	}
+
+	&.has-text-align-center {
+		margin-inline: auto;
+	}
+
+	strong {
+		padding: 0.2em 0.65em;
+		border-radius: var(--wp--custom--radius--full);
+		background: var(--wp--preset--color--primary-alt);
+		color: var(--wp--custom--semantic--on-accent);
+	}
+
+	// Without a tag, the padding is even.
+	&:not(:has(strong)) {
+		padding-inline: 0.9em;
+	}
+}
+
+// On a Brand surface the pill, check marks, and plan badge take the section's text and
+// button colors; the brand color would hide them.
+.is-style-section-brand .digimia-pill {
+	border-color: color-mix(in srgb, currentColor 30%, transparent);
+	background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.is-style-section-brand .digimia-check-row > p::before {
+	color: var(--wp--custom--semantic--brand-button);
+}
+
+.is-style-section-brand .digimia-badge {
+	background: var(--wp--custom--semantic--brand-button);
+	color: var(--wp--custom--semantic--brand-button-text);
+}
+
+// Glow hero (hero-saas-glow): a stage lit by the accent colors at its lower
+// corners that ends in a curve partway down the product screenshot. The stage
+// is the section's own color, so the section style picks the look: Default
+// (the page color), Soft, or Contrast (dark in light mode). A strip in the page
+// color brings the page back below the curve; the ellipse cut out of its top
+// edge draws the curve. The top stays plain, so the stage meets the header
+// without a seam.
+// Accent card: the accent color with the text color made for it.
+.digimia-accent-card {
+	background: var(--wp--preset--color--primary-alt);
+	color: var(--wp--custom--semantic--on-accent);
+
+	:is(h1, h2, h3, h4, p, a:not(.wp-element-button)) {
+		color: inherit;
+	}
+
+	// The brand tint turns lime in dark mode and vanishes on the accent, so
+	// badges take a tint of the card's own text color.
+	.digimia-badge {
+		background: color-mix(in srgb, currentColor 12%, transparent);
+	}
+}

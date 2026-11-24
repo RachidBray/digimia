@@ -1,0 +1,87 @@
+/* ============================================================================
+   Pattern Components — shared by Digimia patterns (docs/ai/design-system.md)
+   ========================================================================= */
+
+/* Media that fills its column beside text
+   -------------------------------------------------------------------------
+   Stacked (phones): a 4:3 image. Side by side: the image column stretches to
+   the text column's height and the image covers it. */
+
+.digimia-media-fill {
+	margin: 0;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+
+	img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+// A Cover (hero-card-video) has a 430px core min-height, which with the
+// aspect ratio would make it wider than a phone screen.
+.wp-block-cover.digimia-media-fill {
+	min-height: 0;
+}
+
+@media (min-width: 782px) {
+	.wp-block-columns .digimia-media-fill {
+		height: 100%;
+		min-height: 22rem;
+		aspect-ratio: auto;
+	}
+}
+
+/* Floating info card over an image (feature-split-icons). The card overlaps
+   the image's lower edge; from 782px it also hangs past the left edge. */
+.digimia-floating-media {
+	position: relative;
+	padding-bottom: var(--wp--preset--spacing--large);
+
+	> .digimia-media-fill {
+		margin: 0;
+	}
+
+	> .digimia-floating-card {
+		position: absolute;
+		bottom: 0;
+		inset-inline-start: var(--wp--preset--spacing--medium);
+		max-width: min(22rem, calc(100% - 2 * var(--wp--preset--spacing--medium)));
+		margin: 0;
+	}
+}
+
+@media (min-width: 782px) {
+	.wp-block-columns .digimia-floating-media {
+		height: 100%;
+		padding-bottom: 0;
+
+		> .digimia-floating-card {
+			bottom: var(--wp--preset--spacing--x-large);
+			inset-inline-start: calc(-1 * var(--wp--preset--spacing--x-large));
+		}
+	}
+}
+
+/* Footer divider
+   -------------------------------------------------------------------------
+   Footers sit on Soft, like many closing sections, so a hairline marks
+   where the page ends. */
+
+// Mostly the light border color, with a quarter of `border-hover` so the
+// line still shows in dark mode; `border-hover` alone reads as a heavy rule.
+footer.wp-block-template-part {
+	border-top: 1px solid color-mix(in srgb, var(--wp--custom--semantic--border) 75%, var(--wp--custom--semantic--border-hover));
+}
+
+/* Cards on Soft sections
+   -------------------------------------------------------------------------
+   A `border-light` border barely shows on the Soft surface, so bordered
+   cards there take the page color instead of staying transparent. Cards
+   with their own background keep it. */
+
+.is-style-section-soft :is(.wp-block-group, .wp-block-column).has-border-light-border-color:not(.has-background) {
+	background-color: var(--wp--preset--color--base);
+}

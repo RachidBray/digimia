@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "digimia/theme-toggle",
+  "title": "Theme Toggle",
+  "category": "design",
+  "icon": "lightbulb",
+  "description": "Dark/light mode toggle button.",
+  "textdomain": "digimia",
+  "supports": {
+    "html": false
+  }
+}

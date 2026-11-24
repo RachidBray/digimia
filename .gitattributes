@@ -1,0 +1,23 @@
+# Files left out of the WordPress.org theme zip (`yarn dist` runs git archive).
+# Sources and build config (src/, package.json, webpack and PostCSS config,
+# icons.mjs, theme-utils.mjs) stay in, so the compiled CSS and JS can be rebuilt.
+/.browserslistrc export-ignore
+/.claude export-ignore
+/.editorconfig export-ignore
+/.env.example export-ignore
+/.gitattributes export-ignore
+/.githooks export-ignore
+/.github export-ignore
+/.gitignore export-ignore
+/.vscode export-ignore
+/AGENTS.md export-ignore
+/CLAUDE.md export-ignore
+/CONTRIBUTING.md export-ignore
+/README.md export-ignore
+/composer.json export-ignore
+/composer.lock export-ignore
+/docs export-ignore
+/phpcs.xml.dist export-ignore
+/tests export-ignore
+/yarn.lock export-ignore
+*.map export-ignore

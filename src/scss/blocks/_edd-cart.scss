@@ -1,0 +1,60 @@
+// Mini cart in the store header.
+.wp-block-edd-cart.edd-blocks__cart-mini {
+	a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--small);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--wp--custom--semantic--brand-hover);
+		}
+	}
+
+	svg {
+		display: block;
+		width: 24px;
+		height: 24px;
+		fill: currentColor;
+	}
+}
+
+// Count badge on the cart's top-right corner, ringed in the page color so it
+// separates from the icon. inc/edd.php keeps "items" for screen readers only.
+// The block wrapper anchors the badge: on the checkout page EDD prints the icon
+// without a link, so the link cannot be the positioning box.
+.wp-block-edd-cart.edd-blocks__cart-mini {
+	position: relative;
+	display: inline-flex;
+
+	a,
+	> svg {
+		padding: 0.35rem;
+	}
+
+	> svg {
+		box-sizing: content-box;
+	}
+}
+
+.edd-blocks-cart__mini-quantity {
+	position: absolute;
+	top: -0.15rem;
+	inset-inline-end: -0.45rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 1.375rem;
+	height: 1.375rem;
+	padding: 0 0.25rem;
+	border: 2px solid var(--wp--custom--semantic--surface-0);
+	border-radius: var(--wp--custom--radius--full);
+	background: var(--wp--preset--color--primary);
+	color: var(--wp--preset--color--base);
+	font-size: 0.6875rem;
+	font-weight: 700;
+	line-height: 1;
+	box-sizing: border-box;
+}

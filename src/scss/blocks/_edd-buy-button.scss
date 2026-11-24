@@ -1,0 +1,107 @@
+.wp-block-edd-buy-button {
+	.edd_download_purchase_form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--small);
+		margin: 0;
+	}
+
+	// Variable prices render as selectable license cards.
+	.edd_price_options ul {
+		display: grid;
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.edd_price_options li {
+		margin: 0;
+	}
+
+	.edd_price_options label {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		padding: 0.8rem 1rem;
+		border: 1px solid var(--wp--custom--semantic--border);
+		border-radius: var(--wp--custom--radius--base);
+		background: var(--wp--custom--semantic--surface-0);
+		cursor: pointer;
+		transition: border-color var(--wp--custom--transition), background-color var(--wp--custom--transition);
+
+		&:hover {
+			border-color: var(--wp--custom--semantic--border-hover);
+		}
+
+		&:has(input:checked) {
+			border-color: var(--wp--preset--color--primary);
+			background: var(--wp--custom--semantic--brand-muted);
+		}
+	}
+
+	// EDD shows its spans with `.edd_download_purchase_form .edd_price_options span`.
+	.edd_price_options .edd_price_option_sep {
+		display: none;
+	}
+
+	// Price at the right edge. `.edd_price_options` outranks EDD's
+	// `.edd_download_purchase_form .edd_price_options span { margin: 0 }`.
+	.edd_price_options .edd_price_option_price {
+		margin-inline-start: auto;
+		font-weight: 700;
+	}
+
+	// EDD Variable Pricing Descriptions prints a description after each
+	// option's label: the whole item becomes the card, the description sits
+	// under the name, and the label's overlay keeps the card clickable.
+	.edd_price_options li:has(> .edd-variable-pricing-desc) {
+		position: relative;
+		border: 1px solid var(--wp--custom--semantic--border);
+		border-radius: var(--wp--custom--radius--base);
+		background: var(--wp--custom--semantic--surface-0);
+		transition: border-color var(--wp--custom--transition), background-color var(--wp--custom--transition);
+
+		&:hover {
+			border-color: var(--wp--custom--semantic--border-hover);
+		}
+
+		&:has(input:checked) {
+			border-color: var(--wp--preset--color--primary);
+			background: var(--wp--custom--semantic--brand-muted);
+		}
+
+		> label {
+			padding-bottom: 0.2rem;
+			border: 0;
+			background: none;
+
+			&::after {
+				position: absolute;
+				inset: 0;
+				content: "";
+			}
+		}
+	}
+
+	// Indented to the option name: card padding + radio (18px) + the gaps
+	// around the `&nbsp;` EDD puts between them, and its width.
+	.edd-variable-pricing-desc {
+		margin: 0;
+		padding-block: 0 0.8rem;
+			padding-inline: calc(1rem + 18px + 1.3rem + 0.275rem) 1rem;
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+		line-height: var(--wp--custom--line-height--snug);
+	}
+
+	.edd_price_option_name {
+		color: var(--wp--custom--semantic--text-primary);
+	}
+
+	.edd_purchase_submit_wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+}

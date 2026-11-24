@@ -1,0 +1,28 @@
+// Pullquote: the quote's paragraph sets its own top margin and the citation
+// goes on its own line.
+.wp-block-pullquote {
+	blockquote {
+		margin: 0;
+	}
+
+	p {
+		margin-block-start: var(--wp--preset--spacing--medium);
+	}
+
+	cite {
+		display: block;
+	}
+
+	// A floated quote keeps the text that wraps around it off its bottom edge.
+	&:is(.alignleft, .alignright) {
+		padding-bottom: var(--wp--preset--spacing--medium);
+	}
+}
+
+// On tablets and phones a floated quote takes the full width.
+@media only screen and (max-width: 781px) {
+	.wp-block-pullquote:is(.alignleft, .alignright) {
+		max-width: 100%;
+		margin-inline: 0 !important;
+	}
+}

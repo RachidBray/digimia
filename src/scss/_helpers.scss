@@ -1,0 +1,65 @@
+// Small rules for core blocks and theme images that have no stylesheet of
+// their own.
+
+// The link a More block leaves at the end of a post's teaser gets a line of
+// its own.
+a.more-link {
+	display: block;
+}
+
+/* Display-size paragraphs (stat numbers, big statements) use the heading
+   font and a heading line height; body spacing spreads a large quote over
+   too many loose lines. :where() keeps editor choices in charge. */
+:where(p:is(.has-x-large-font-size, .has-xx-large-font-size, .has-xxx-large-font-size, .has-xxxx-large-font-size, .has-display-font-size)) {
+	font-family: var(--wp--preset--font-family--heading);
+	line-height: 1.3;
+}
+
+/* Display size: one headline per page, set heavier and tighter so it reads
+   as a single shape. A class beats the heading element styles; weight, line
+   height, and spacing set in the editor are inline and still win. */
+.has-display-font-size {
+	font-weight: 700;
+	line-height: 0.95;
+	letter-spacing: -0.04em;
+}
+
+// A category's description ends without its last paragraph's margin, so the
+// space under it is the layout's.
+.wp-block-term-description p:last-child {
+	margin-bottom: 0;
+}
+
+// The empty group a post with no comments yet leaves above the comment form
+// takes no room.
+.wp-block-group:empty:has(+ .comment-respond) {
+	display: none;
+}
+
+/* Site Logo on dark surfaces: dark mode, or a Contrast section in light mode.
+   Turns a dark logo white; a Contrast section in dark mode is light again. */
+[data-theme="dark"] .wp-block-site-logo img,
+.is-style-section-contrast .wp-block-site-logo img,
+[data-theme="dark"] .digimia-client-logo img,
+.is-style-section-contrast .digimia-client-logo img {
+	filter: brightness(0) invert(1);
+}
+
+[data-theme="dark"] .is-style-section-contrast .wp-block-site-logo img,
+[data-theme="dark"] .is-style-section-contrast .digimia-client-logo img {
+	filter: none;
+}
+
+/* Theme illustrations inlined by inc/blocks.php: sized like the <img> they replace. */
+.wp-block-image .digimia-illustration {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+}
+
+/* Client logos (patterns/images/client-logo-*.svg): one dark color, muted like secondary text. */
+.digimia-client-logo img {
+	width: auto;
+	opacity: 0.72;
+}

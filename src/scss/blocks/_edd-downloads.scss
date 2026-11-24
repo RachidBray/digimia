@@ -1,0 +1,100 @@
+@use '../mixins';
+
+// EDD Downloads grid cards share the product card definition (src/scss/_mixins.scss).
+.wp-block-edd-downloads.digimia-download-grid {
+	.edd-blocks__columns {
+		gap: var(--wp--preset--spacing--large);
+	}
+
+	.edd-blocks__download {
+		@include mixins.product-card;
+		gap: var(--wp--preset--spacing--medium);
+	}
+
+	.edd-blocks__download-header {
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--medium);
+	}
+
+	.edd-blocks__download-image-link {
+		@include mixins.product-card-media;
+	}
+
+	// Titles are h3, or h2 on the shop page (inc/edd.php).
+	.edd-blocks__download-header :is(h2, h3) {
+		@include mixins.product-card-title;
+	}
+
+	.edd-blocks__download-content {
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--small);
+		color: var(--wp--custom--semantic--text-secondary);
+
+		p {
+			margin: 0;
+		}
+	}
+
+	// Moved into the footer, beside the button (inc/edd.php).
+	.edd-blocks__download-price {
+		@include mixins.product-card-price;
+	}
+
+	.edd-blocks__download-footer {
+		@include mixins.product-card-footer;
+	}
+}
+
+.wp-block-edd-downloads.digimia-home-download-grid {
+	.edd-blocks__download {
+		gap: var(--wp--preset--spacing--small);
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+		box-shadow: none;
+
+		&:hover {
+			transform: translateY(-2px);
+			box-shadow: none;
+		}
+	}
+
+	.edd-blocks__download-image-link {
+		border-radius: var(--wp--custom--radius--sm);
+ 		background: var(--wp--custom--semantic--surface-0);
+
+		img {
+			aspect-ratio: 1 / 1;
+		}
+	}
+
+	.edd-blocks__download-title {
+		font-size: var(--wp--preset--font-size--medium);
+		line-height: var(--wp--custom--line-height--snug);
+	}
+}
+
+// EDD's default 2-column grid uses `repeat(2, 50%)`, which overflows once a gap is added.
+.wp-block-edd-downloads .edd-blocks__columns {
+	@media (min-width: 600px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	@media (min-width: 960px) {
+		&.edd-blocks__columns-3 {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		&.edd-blocks__columns-4 {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+}
+
+// Featured badge, themed to the palette instead of EDD's inline colors.
+.wp-block-edd-downloads .edd-blocks__download--featured-badge {
+	--edd-featured-badge-bg: var(--wp--preset--color--primary);
+	--edd-featured-badge-color: var(--wp--preset--color--base);
+}

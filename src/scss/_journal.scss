@@ -1,0 +1,55 @@
+/* Journal: comments and sidebar (template patterns)
+--------------------------------------------- */
+
+// The card gap already spaces the comment; the content's own paragraph margins would double it.
+.digimia-comment .wp-block-comment-content {
+	> :first-child {
+		margin-top: 0;
+	}
+
+	> :last-child {
+		margin-bottom: 0;
+	}
+}
+
+// Sidebar lists as hairline rows.
+.digimia-sidebar-posts,
+.digimia-sidebar-topics {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		margin: 0;
+		padding-block: 0.75rem;
+		border-bottom: 1px solid var(--wp--custom--semantic--border);
+
+		&:first-child {
+			padding-top: 0;
+		}
+	}
+
+	a {
+		color: var(--wp--custom--semantic--text-primary);
+		font-weight: 600;
+		text-decoration: none;
+	}
+}
+
+.digimia-sidebar-posts .wp-block-latest-posts__post-date {
+	margin-top: 0.25rem;
+	color: var(--wp--custom--semantic--text-secondary);
+}
+
+// Topic name left, post count right.
+.digimia-sidebar-topics li {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--wp--preset--spacing--small);
+	color: var(--wp--custom--semantic--text-secondary);
+}
+
+// "Keep reading" lists other posts only; with none to show, the whole section goes.
+.digimia-keep-reading:not(:has(.wp-block-post-template)) {
+	display: none;
+}

@@ -1,0 +1,52 @@
+{
+	"name": "digimia",
+	"version": "1.0.0",
+	"description": "Launch a blazing-fast, pixel-perfect website with the Digimia WordPress block theme.",
+	"scripts": {
+		"dev": "concurrently \"webpack --watch --mode development\" \"node theme-utils.mjs watch --text-domain=digimia\"",
+		"build": "yarn icons:optimize && webpack --mode production",
+		"build:dev": "webpack --mode development",
+		"translate:patterns": "node theme-utils.mjs escape-patterns --text-domain=digimia",
+		"dist": "git archive --format=zip --prefix=digimia/ -o digimia.zip HEAD",
+		"icons:add": "node icons.mjs add",
+		"icons:optimize": "node icons.mjs optimize",
+		"icons:list": "node icons.mjs list",
+		"icons:remove": "node icons.mjs remove",
+		"icons:search": "node icons.mjs search",
+		"test:visual": "node tests/visual/run.mjs"
+	},
+	"keywords": [
+		"WordPress",
+		"theme",
+		"block-theme",
+		"translation"
+	],
+	"author": "AddictedToWeb",
+	"license": "GPL-3.0-or-later",
+	"dependencies": {
+		"chokidar": "^3.5.3",
+		"fast-glob": "^3.3.2",
+		"parse5-html-rewriting-stream": "^7.0.0"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.29.0",
+		"@babel/preset-env": "^7.29.0",
+		"@babel/preset-react": "^7.28.5",
+		"@phosphor-icons/core": "2.1.1",
+		"autoprefixer": "^10.4.16",
+		"babel-loader": "^10.0.0",
+		"concurrently": "^8.2.2",
+		"css-loader": "^6.8.1",
+		"cssnano": "^6.0.1",
+		"mini-css-extract-plugin": "^2.7.6",
+		"postcss": "^8.4.31",
+		"postcss-loader": "^7.3.3",
+		"sass": "^1.69.5",
+		"sass-loader": "^13.3.2",
+		"svgo": "^4.0.1",
+		"webpack": "^5.89.0",
+		"webpack-cli": "^5.1.4",
+		"webpack-remove-empty-scripts": "^1.0.4"
+	},
+	"type": "module"
+}

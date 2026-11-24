@@ -1,0 +1,7 @@
+// Preformatted text keeps its lines as typed and scrolls sideways when a
+// line is longer than the block.
+.wp-block-preformatted {
+	overflow-x: auto;
+	overflow-wrap: normal;
+	white-space: pre;
+}

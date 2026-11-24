@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<ruleset name="Digimia">
+	<description>Coding standards for the Digimia theme. Used by `composer run wpcs:scan` and the WPCS check on GitHub.</description>
+
+	<file>.</file>
+
+	<!-- Third-party code, build output, and block pattern markup (reviewed in the editor instead). -->
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/ref/*</exclude-pattern>
+	<exclude-pattern>/assets/*</exclude-pattern>
+	<exclude-pattern>/patterns/*</exclude-pattern>
+	<exclude-pattern>/tests/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+	<arg name="parallel" value="8"/>
+
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-Docs"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="digimia"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="digimia"/>
+				<element value="Digimia"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

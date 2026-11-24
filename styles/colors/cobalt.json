@@ -1,0 +1,83 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Cobalt",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"name": "Cobalt",
+					"slug": "primary",
+					"color": "#1D4ED8"
+				},
+				{
+					"name": "Cobalt Hover",
+					"slug": "primary-accent",
+					"color": "#2F5FE6"
+				},
+				{
+					"name": "Tangerine",
+					"slug": "primary-alt",
+					"color": "#FF9F43"
+				},
+				{
+					"name": "Tangerine Wash",
+					"slug": "primary-alt-accent",
+					"color": "#FFEBD6"
+				},
+				{
+					"name": "Navy",
+					"slug": "main",
+					"color": "#0F1B2D"
+				},
+				{
+					"name": "Navy Soft",
+					"slug": "main-accent",
+					"color": "#435266"
+				},
+				{
+					"name": "White",
+					"slug": "base",
+					"color": "#FFFFFF"
+				},
+				{
+					"name": "Slate",
+					"slug": "secondary",
+					"color": "#5B6A7E"
+				},
+				{
+					"name": "Sky Mist",
+					"slug": "tertiary",
+					"color": "#EFF4FB"
+				},
+				{
+					"name": "Border Light",
+					"slug": "border-light",
+					"color": "#DCE5F2"
+				},
+				{
+					"name": "Border Dark",
+					"slug": "border-dark",
+					"color": "#B6C4DA"
+				}
+			]
+		},
+		"custom": {
+			"color": {
+				"dark": {
+					"primary": "#7FA6FF",
+					"primary-accent": "#A3BFFF",
+					"primary-alt": "#FFA552",
+					"primary-alt-accent": "#3A2A1A",
+					"main": "#EEF3FA",
+					"main-accent": "#B3C0D1",
+					"base": "#0B1220",
+					"secondary": "#8F9DB0",
+					"tertiary": "#131C2E",
+					"border-light": "#22304A",
+					"border-dark": "#364665"
+				}
+			}
+		}
+	}
+}

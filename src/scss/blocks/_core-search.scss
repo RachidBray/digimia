@@ -1,0 +1,8 @@
+/* Search: the input matches the button's pill shape
+--------------------------------------------- */
+
+// Two classes to outrank the global `input[type="search"]` field rule (8px radius).
+.wp-block-search .wp-block-search__input {
+	padding-inline: var(--wp--custom--button--padding-inline);
+	border-radius: var(--wp--custom--button--radius);
+}

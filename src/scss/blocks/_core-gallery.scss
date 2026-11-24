@@ -1,0 +1,5 @@
+// A gallery's caption sits right under its images; the caption spacing in
+// _reset.scss is for a single image.
+.wp-block-gallery figcaption.blocks-gallery-caption {
+	margin-top: 0;
+}

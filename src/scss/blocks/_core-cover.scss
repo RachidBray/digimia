@@ -1,0 +1,19 @@
+// Blurred Image: the photo turns into soft color behind the text. Scaled up,
+// so the blur's faded rim stays outside the cover.
+.is-style-blur-image-less {
+	overflow: hidden;
+
+	> .wp-block-cover__image-background {
+		filter: blur(25px);
+		transform: scale(1.5);
+	}
+}
+
+// On phones every cover starts at 430px, whatever its height on a desktop:
+// a tall one leaves room to scroll past it, a short one room for its text as
+// it wraps. Media-fill covers size themselves by aspect ratio (_components.scss).
+@media (max-width: 781px) {
+	.wp-block-cover:not(.has-aspect-ratio, .digimia-media-fill) {
+		min-height: 430px !important;
+	}
+}

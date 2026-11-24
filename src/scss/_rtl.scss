@@ -1,0 +1,50 @@
+/* Right to left (Arabic)
+--------------------------------------------- */
+
+// The layout flips by itself: components use start and end (logical
+// properties), never left and right. What applies across components is here.
+
+// Icons that point along the line (arrows, carets) face the reading
+// direction. PHP marks them `is-directional` (inc/icons.php).
+.is-directional:dir(rtl) svg {
+	transform: scaleX(-1);
+}
+
+// Pictures keep their own direction. Inlined SVG illustrations draw English
+// text that would otherwise line up from the wrong edge and spill out, and
+// code always reads left to right.
+:is(.digimia-illustration, .digimia-code-window, pre, .wp-block-code):dir(rtl) {
+	direction: ltr;
+	text-align: left;
+}
+
+:is(code, kbd, samp):dir(rtl) {
+	direction: ltr;
+	unicode-bidi: isolate;
+}
+
+// Addresses, links, and license keys are typed left to right, as in the
+// WordPress admin.
+:is(input[type="email"], input[type="url"], input.edd_sl_license_key):dir(rtl) {
+	direction: ltr;
+}
+
+// Arabic letters join up, so letter spacing breaks words apart. The theme
+// sets it on headings, small labels, and in every typography preset, and a
+// site owner can add more in Styles, so it is turned off for the whole page.
+// Pages in Arabic, or read right to left: the editor's canvas only says the
+// direction, not the language.
+:root:is(:lang(ar), [dir="rtl"]) body * {
+	letter-spacing: normal !important;
+}
+
+// Arabic letters reach higher and lower than Latin ones: tight heading line
+// heights would clip them.
+:root:is(:lang(ar), [dir="rtl"]) {
+	--wp--custom--line-height--tight: 1.35;
+	--wp--custom--line-height--snug: 1.45;
+}
+
+:root:is(:lang(ar), [dir="rtl"]) .has-display-font-size {
+	line-height: 1.25;
+}

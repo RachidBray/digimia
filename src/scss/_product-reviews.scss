@@ -1,0 +1,368 @@
+// ==========================================================================
+// Product reviews (EDD Reviews)
+// ==========================================================================
+// inc/edd-reviews.php renders each review in this markup and adds the rating
+// summary; EDD Reviews appends the section to the product description.
+// Rules hang off `#edd-reviews` to outrank the extension's stylesheet.
+
+// Five stars filled to `--digimia-rating` (0–5, set inline). The star is
+// Phosphor's star-fill, the filled form of assets/icons/star.svg, on a tile
+// slightly wider than tall so the stars keep a gap.
+.digimia-rating-stars {
+	display: inline-block;
+	flex-shrink: 0;
+	width: 5.625em;
+	height: 1em;
+	background: linear-gradient(90deg, var(--wp--custom--semantic--warning) calc(var(--digimia-rating, 0) / 5 * 100%), var(--wp--custom--semantic--border-hover) 0);
+	vertical-align: -0.125em;
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-16 0 288 256'%3E%3Cpath d='M234.29 114.85l-45 38.83L203 211.75a16.4 16.4 0 0 1-24.5 17.82L128 198.49l-50.53 31.08A16.4 16.4 0 0 1 53 211.75l13.76-58.07-45-38.83A16.46 16.46 0 0 1 31.08 86l59-4.76 22.76-55.08a16.36 16.36 0 0 1 30.27 0l22.75 55.08 59 4.76a16.46 16.46 0 0 1 9.37 28.86Z'/%3E%3C/svg%3E") left / 1.125em 1em repeat-x;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-16 0 288 256'%3E%3Cpath d='M234.29 114.85l-45 38.83L203 211.75a16.4 16.4 0 0 1-24.5 17.82L128 198.49l-50.53 31.08A16.4 16.4 0 0 1 53 211.75l13.76-58.07-45-38.83A16.46 16.46 0 0 1 31.08 86l59-4.76 22.76-55.08a16.36 16.36 0 0 1 30.27 0l22.75 55.08 59 4.76a16.46 16.46 0 0 1 9.37 28.86Z'/%3E%3C/svg%3E") left / 1.125em 1em repeat-x;
+}
+
+// The rating fact in the product meta row: one star, then "4.7 (3 reviews)".
+// Its star takes the place of the row's dot separator.
+.digimia-product-meta > .digimia-product-rating {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+
+	&::before {
+		width: 1em;
+		height: 1em;
+		margin: 0;
+		background: var(--wp--custom--semantic--warning);
+		content: "";
+		-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M234.29 114.85l-45 38.83L203 211.75a16.4 16.4 0 0 1-24.5 17.82L128 198.49l-50.53 31.08A16.4 16.4 0 0 1 53 211.75l13.76-58.07-45-38.83A16.46 16.46 0 0 1 31.08 86l59-4.76 22.76-55.08a16.36 16.36 0 0 1 30.27 0l22.75 55.08 59 4.76a16.46 16.46 0 0 1 9.37 28.86Z'/%3E%3C/svg%3E") center / contain no-repeat;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M234.29 114.85l-45 38.83L203 211.75a16.4 16.4 0 0 1-24.5 17.82L128 198.49l-50.53 31.08A16.4 16.4 0 0 1 53 211.75l13.76-58.07-45-38.83A16.46 16.46 0 0 1 31.08 86l59-4.76 22.76-55.08a16.36 16.36 0 0 1 30.27 0l22.75 55.08 59 4.76a16.46 16.46 0 0 1 9.37 28.86Z'/%3E%3C/svg%3E") center / contain no-repeat;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+
+		&:hover {
+			color: var(--wp--custom--semantic--text-primary);
+			text-decoration: underline;
+		}
+	}
+}
+
+#edd-reviews {
+	display: grid;
+	gap: var(--wp--preset--spacing--large);
+	margin-top: var(--wp--preset--spacing--xx-large);
+	padding-top: var(--wp--preset--spacing--x-large);
+	border-top: 1px solid var(--wp--custom--semantic--border);
+	scroll-margin-top: var(--wp--preset--spacing--x-large);
+
+	> * {
+		margin: 0;
+	}
+
+	.edd-reviews-title {
+		margin: 0;
+	}
+
+	/* Summary and list
+	------------------------------------------------------------------------ */
+
+	.digimia-review-summary {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 0.75rem;
+		margin-top: var(--wp--preset--spacing--small);
+
+		.digimia-rating-stars {
+			font-size: 1.25rem;
+		}
+
+		p {
+			margin: 0;
+			color: var(--wp--custom--semantic--text-tertiary);
+			font-size: var(--wp--preset--font-size--small);
+		}
+
+		strong {
+			color: var(--wp--custom--semantic--text-primary);
+			font-weight: 600;
+		}
+	}
+
+	.edd-review-list {
+		margin-top: var(--wp--preset--spacing--medium);
+	}
+
+	.digimia-review {
+		margin: 0;
+		padding: var(--wp--preset--spacing--large) 0;
+		border-top: 1px solid var(--wp--custom--semantic--border);
+
+		&.is-reply {
+			margin-inline-start: var(--wp--preset--spacing--large);
+			padding-inline-start: var(--wp--preset--spacing--medium);
+			border-top: 0;
+			border-inline-start: 2px solid var(--wp--custom--semantic--border);
+		}
+	}
+
+	.digimia-review__header {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.digimia-review__title {
+		margin: 0;
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--base);
+		font-weight: 600;
+		line-height: var(--wp--custom--line-height--snug);
+	}
+
+	.digimia-review__content {
+		margin-top: 0.5rem;
+
+		> * {
+			margin: 0;
+		}
+
+		> * + * {
+			margin-top: 0.75em;
+		}
+	}
+
+	// Reviewer, date, and badge on one line: "Tom Becker · Nov 2, 2026".
+	.digimia-review__meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: var(--wp--preset--spacing--medium);
+		color: var(--wp--custom--semantic--text-tertiary);
+		font-size: var(--wp--preset--font-size--small);
+
+		.avatar {
+			float: none;
+			width: 1.75rem;
+			height: 1.75rem;
+			margin: 0;
+			border-radius: var(--wp--custom--radius--full);
+		}
+
+		a {
+			color: inherit;
+			text-decoration: none;
+
+			&:hover {
+				color: var(--wp--custom--semantic--text-primary);
+			}
+		}
+	}
+
+	.digimia-review__author {
+		color: var(--wp--custom--semantic--text-primary);
+		font-weight: 600;
+	}
+
+	:is(.digimia-review__date, .digimia-review__verified, .digimia-review__edit)::before {
+		margin-inline-end: 0.5rem;
+		color: var(--wp--custom--semantic--text-tertiary);
+		content: "·";
+	}
+
+	.digimia-review__verified {
+		color: var(--wp--custom--semantic--success);
+		font-weight: 600;
+	}
+
+	// Vote and Reply on one row under the review.
+	.digimia-review__actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 1rem;
+		margin-top: 0.75rem;
+
+		&:empty {
+			display: none;
+		}
+
+		> * {
+			margin: 0;
+		}
+	}
+
+	// "Helpful? Yes No". EDD Reviews' intro line ("Help other customers…") is
+	// the paragraph before the question.
+	.edd-review-vote {
+		padding: 0;
+		background: none;
+
+		p {
+			margin: 0;
+			color: var(--wp--custom--semantic--text-tertiary);
+			font-size: var(--wp--preset--font-size--small);
+			font-style: normal;
+			font-weight: 400;
+		}
+
+		> p:nth-last-of-type(2):not(.edd-review-voting-feedback) {
+			display: none;
+		}
+
+		.edd-review-voting-feedback {
+			margin-bottom: 0.4rem;
+			font-size: var(--wp--preset--font-size--x-small);
+		}
+	}
+
+	// Yes, No, and Reply (shown to anyone signed in) as small outline pills.
+	:is(.edd-reviews-voting-buttons a, .digimia-review .comment-reply-link) {
+		display: inline-block;
+		padding: 0.1rem 0.75rem;
+		border: 1px solid var(--wp--custom--semantic--border-hover);
+		border-radius: var(--wp--custom--radius--full);
+		color: var(--wp--custom--semantic--text-primary);
+		font-size: var(--wp--preset--font-size--x-small);
+		font-weight: 600;
+		line-height: 1.6;
+		text-decoration: none;
+		transition: border-color var(--wp--custom--transition);
+
+		&:hover {
+			border-color: var(--wp--preset--color--primary);
+		}
+	}
+
+	.edd-reviews-voting-buttons a {
+		margin-inline-start: 0.35rem;
+	}
+
+	// A signed-out visitor sees one line with a sign-in link
+	// (inc/edd-reviews.php); EDD Reviews' login form after it is not needed.
+	.edd-reviews-form #loginform {
+		display: none;
+	}
+
+	:is(.edd-reviews-not-allowed, .edd-reviews-awaiting-moderation, .edd-review-awaiting-moderation, .edd-reviews-closed-message) {
+		margin: 0;
+		padding: var(--wp--preset--spacing--medium);
+		border: 1px solid var(--wp--custom--semantic--border);
+		border-radius: var(--wp--custom--radius--lg);
+		background: var(--wp--custom--semantic--surface-1);
+		color: var(--wp--custom--semantic--text-secondary);
+		font-size: var(--wp--preset--font-size--small);
+		font-style: normal;
+		font-weight: 400;
+
+		a {
+			color: var(--wp--preset--color--primary);
+			font-weight: 600;
+		}
+	}
+
+	.edd-review-awaiting-moderation {
+		margin-top: 0.75rem;
+	}
+}
+
+/* Write a review, and the reply form
+------------------------------------------------------------------------ */
+
+// EDD Reviews prints the reply form (`#edd-reviews-reply`) after the reviews
+// section, hidden; its script shows it in place of the review form when Reply
+// is clicked, under the review. Both forms share these styles. `div`: the
+// reply textarea carries the same ID.
+div#edd-reviews-reply {
+	margin-block: 0 var(--wp--preset--spacing--large);
+	padding: var(--wp--preset--spacing--large);
+	border: 1px solid var(--wp--custom--semantic--border);
+	border-radius: var(--wp--custom--radius--lg);
+	background: var(--wp--custom--semantic--surface-0);
+
+	// "Cancel reply" beside the heading, as a quiet link.
+	.edd-reviews-heading small {
+		margin-inline-start: 0.5rem;
+		font-family: var(--wp--preset--font-family--primary);
+		font-size: var(--wp--preset--font-size--small);
+		font-weight: 600;
+
+		a {
+			color: var(--wp--custom--semantic--text-tertiary);
+			text-decoration: none;
+
+			&:hover {
+				color: var(--wp--custom--semantic--error);
+			}
+		}
+	}
+}
+
+:is(#edd-reviews, #edd-reviews-reply) {
+	.edd-reviews-form {
+		overflow: visible;
+	}
+
+	.edd-reviews-heading {
+		margin: 0 0 var(--wp--preset--spacing--small);
+		font-size: var(--wp--preset--font-size--medium);
+	}
+
+	.logged-in-as {
+		margin: 0 0 var(--wp--preset--spacing--medium);
+		color: var(--wp--custom--semantic--text-tertiary);
+		font-size: var(--wp--preset--font-size--small);
+	}
+
+	.edd-reviews-form fieldset {
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	// The review form wraps its fields in `.edd-reviews-form-inner`; the reply
+	// form puts them straight in the fieldset.
+	:is(.edd-reviews-form-inner, #edd-reviews-reply-form fieldset) {
+		display: grid;
+		gap: var(--wp--preset--spacing--medium);
+
+		> p {
+			margin: 0;
+		}
+
+		label {
+			display: block;
+			margin: 0 0 0.4rem;
+			color: var(--wp--custom--semantic--text-primary);
+			font-size: var(--wp--preset--font-size--small);
+			font-weight: 600;
+		}
+
+		.required {
+			color: var(--wp--custom--semantic--error);
+		}
+
+		// Checkbox and its label on one line, as on the checkout.
+		> .comment-form-cookies-consent {
+			display: flex;
+			align-items: center;
+			gap: 0.6rem;
+
+			label {
+				margin: 0;
+				font-weight: 400;
+				cursor: pointer;
+			}
+		}
+	}
+
+	// Star picker: EDD Reviews' Dashicons stars and script, in the theme colors.
+	.edd-reviews-star-rating-container {
+		display: inline-block;
+		color: var(--wp--custom--semantic--border-hover);
+
+		.edd-reviews-stars-filled {
+			color: var(--wp--custom--semantic--warning);
+		}
+	}
+}
