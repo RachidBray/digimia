@@ -543,11 +543,11 @@
 				},
 				{
 					"fluid": {
-						"max": "4.75rem",
+						"max": "4.375rem",
 						"min": "3rem"
 					},
 					"name": "Massive",
-					"size": "4.75rem",
+					"size": "4.375rem",
 					"slug": "xxxx-large"
 				},
 				{

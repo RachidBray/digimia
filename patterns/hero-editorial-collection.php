@@ -11,10 +11,10 @@
 ?>
 <!-- wp:group {"tagName":"section","metadata":{"name":"Hero"},"align":"full","className":"digimia-home-hero is-style-section-soft","style":{"spacing":{"margin":{"top":"0","bottom":"0"},"padding":{"top":"var:preset|spacing|xxx-large","bottom":"var:preset|spacing|xxx-large","left":"var:preset|spacing|medium","right":"var:preset|spacing|medium"},"blockGap":"var:preset|spacing|x-large"}},"layout":{"type":"constrained"}} -->
 <section class="wp-block-group alignfull digimia-home-hero is-style-section-soft" style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--xxx-large);padding-right:var(--wp--preset--spacing--medium);padding-bottom:var(--wp--preset--spacing--xxx-large);padding-left:var(--wp--preset--spacing--medium)"><!-- wp:columns {"align":"wide","verticalAlignment":"center","style":{"spacing":{"blockGap":{"left":"var:preset|spacing|xx-large"}}}} -->
-<div class="wp-block-columns alignwide are-vertically-aligned-center"><!-- wp:column {"verticalAlignment":"center","width":"49%","className":"digimia-home-copy","style":{"spacing":{"blockGap":"var:preset|spacing|large"}}} -->
-<div class="wp-block-column is-vertically-aligned-center digimia-home-copy" style="flex-basis:49%"><!-- wp:group {"metadata":{"name":"Heading"},"style":{"spacing":{"blockGap":"var:preset|spacing|small"}},"layout":{"type":"default"}} -->
-<div class="wp-block-group"><!-- wp:heading {"level":1,"fontSize":"xxx-large"} -->
-<h1 class="wp-block-heading has-xxx-large-font-size"><?php esc_html_e( 'Good things for people who', 'digimia' ); ?> <mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color"><?php esc_html_e( 'make', 'digimia' ); ?></mark> <?php esc_html_e( 'things', 'digimia' ); ?>.</h1>
+<div class="wp-block-columns alignwide are-vertically-aligned-center"><!-- wp:column {"verticalAlignment":"center","width":"53%","className":"digimia-home-copy","style":{"spacing":{"blockGap":"var:preset|spacing|large"}}} -->
+<div class="wp-block-column is-vertically-aligned-center digimia-home-copy" style="flex-basis:53%"><!-- wp:group {"metadata":{"name":"Heading"},"style":{"spacing":{"blockGap":"var:preset|spacing|small"}},"layout":{"type":"default"}} -->
+<div class="wp-block-group"><!-- wp:heading {"level":1,"fontSize":"xxxx-large"} -->
+<h1 class="wp-block-heading has-xxxx-large-font-size"><?php esc_html_e( 'Good things for people who', 'digimia' ); ?> <mark style="background-color:rgba(0, 0, 0, 0)" class="has-inline-color"><?php esc_html_e( 'make', 'digimia' ); ?></mark> <?php esc_html_e( 'things', 'digimia' ); ?>.</h1>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"digimia-home-intro","textColor":"main-accent","fontSize":"lead"} -->
@@ -47,8 +47,8 @@
 <!-- /wp:group --></div>
 <!-- /wp:column -->
 
-<!-- wp:column {"verticalAlignment":"center","width":"51%","className":"digimia-home-art-column"} -->
-<div class="wp-block-column is-vertically-aligned-center digimia-home-art-column" style="flex-basis:51%"><!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"digimia-home-ui"} -->
+<!-- wp:column {"verticalAlignment":"center","width":"47%","className":"digimia-home-art-column"} -->
+<div class="wp-block-column is-vertically-aligned-center digimia-home-art-column" style="flex-basis:47%"><!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"digimia-home-ui"} -->
 <figure class="wp-block-image size-full digimia-home-ui"><img src="<?php echo esc_url( get_template_directory_uri() . '/patterns/images/digimia-ui-store.svg' ); ?>" alt="<?php esc_attr_e( 'Store cards: this week’s best sellers led by the Brand Starter Kit, 2,480 downloads up 18%, and a new sale', 'digimia' ); ?>"/></figure>
 <!-- /wp:image --></div>
 <!-- /wp:column --></div>
